@@ -44,7 +44,7 @@ const Signup: React.FC<SignupProps> = ({}) => {
                     }}
                     className="w-80 ml-auto mr-auto  flex flex-col items-center justify-center"
                 >
-                    <p className="text-xl mr-auto ml-0 font-medium">
+                    <p className="text-xl mr-auto ml-0 font-semibold">
                         Think it. Make it.
                     </p>
                     <p className="text-xl mr-auto ml-0 mb-2 font-medium text-slate-500">
@@ -73,20 +73,17 @@ const Signup: React.FC<SignupProps> = ({}) => {
                                     name="name"
                                     placeholder="Dwight Schrute"
                                     label="Name"
-                                    shadow
                                 />
                                 <InputField
                                     name="email"
                                     placeholder="dwight@dundermifflin.com"
                                     label="Email"
-                                    shadow
                                 />
                                 <InputField
                                     type="password"
                                     name="password"
                                     placeholder="bears, beets, battlestar galactica!"
                                     label="Password"
-                                    shadow
                                 />
                                 <Button
                                     loading={isSubmitting || loading}

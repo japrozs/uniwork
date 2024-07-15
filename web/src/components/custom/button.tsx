@@ -35,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
     return (
         <button
-            disabled={disabled}
+            disabled={loading}
             ref={buttonRef}
             style={{
                 fontFamily: "Inter",
@@ -58,7 +58,7 @@ export const Button: React.FC<ButtonProps> = ({
         >
             {loading ? (
                 <>
-                    <Spinner className="w-6 h-6 text-gray-200 fill-primary-color" />
+                    <Spinner className="w-5 h-5 text-gray-200 fill-primary-color" />
                 </>
             ) : (
                 <>
