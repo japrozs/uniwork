@@ -24,7 +24,7 @@ const config = {
                 ring: "hsl(var(--ring))",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
-                "primary-color": "#007AFF",
+                "primary-color": "#0077d4",
                 primary: {
                     DEFAULT: "hsl(var(--primary))",
                     foreground: "hsl(var(--primary-foreground))",
@@ -76,6 +76,7 @@ const config = {
             fontSize: {
                 tiny: "0.89rem",
                 smol: "0.95rem",
+                "sidebar-item": "0.92rem",
             },
         },
     },

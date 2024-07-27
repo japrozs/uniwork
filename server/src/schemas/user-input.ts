@@ -5,6 +5,8 @@ export class UserInput {
     @Field()
     email: string;
     @Field()
+    username: string;
+    @Field()
     name: string;
     @Field()
     password: string;

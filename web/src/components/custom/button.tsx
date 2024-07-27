@@ -39,7 +39,7 @@ export const Button: React.FC<ButtonProps> = ({
             ref={buttonRef}
             style={{
                 fontFamily: "Inter",
-                fontWeight: 444,
+                fontWeight: 400,
             }}
             className={`${
                 (loading || disabled) && "cursor-not-allowed"

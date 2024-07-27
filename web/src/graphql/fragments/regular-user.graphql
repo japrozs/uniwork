@@ -1,7 +1,9 @@
 fragment RegularUser on User {
     id
     name
+    username
     email
+    bio
     createdAt
     updatedAt
     __typename

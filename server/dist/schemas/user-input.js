@@ -20,6 +20,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
+], UserInput.prototype, "username", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
 ], UserInput.prototype, "name", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),

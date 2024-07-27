@@ -6,11 +6,45 @@ export const validateRegister = (options: UserInput) => {
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 
-    if (options.name.length <= 5) {
+    if (options.name.length <= 2) {
         return [
             {
                 field: "name",
-                message: "Length must be greater than 4",
+                message: "Length must be greater than 3",
+            },
+        ];
+    }
+    if (options.username.length <= 2) {
+        return [
+            {
+                field: "username",
+                message: "Length must be greater than 3",
+            },
+        ];
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(options.username)) {
+        return [
+            {
+                field: "username",
+                message:
+                    "Username can only contain letters, numbers, and underscores",
+            },
+        ];
+    }
+
+    if (options.username.length > 30) {
+        return [
+            {
+                field: "username",
+                message: "Username must not exceed 30 characters",
+            },
+        ];
+    }
+    if (options.username.includes(" ")) {
+        return [
+            {
+                field: "username",
+                message: "Username cannot include spaces",
             },
         ];
     }

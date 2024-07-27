@@ -1,0 +1,13 @@
+query getPosts {
+    getPosts {
+        ...PostSnippet
+    }
+}
+# query getPosts($limit: Int!, $cursor: String) {
+#     getPosts(limit: $limit, cursor: $cursor) {
+#         hasMore
+#         posts {
+#             ...PostSnippet
+#         }
+#     }
+# }

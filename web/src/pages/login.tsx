@@ -31,10 +31,10 @@ const Login: React.FC<LoginProps> = ({}) => {
                     <Link href="/">
                         <Image
                             src="/logo.svg"
-                            className="h-8 w-auto"
+                            className="h-7 w-auto"
                             height={20}
                             width={20}
-                            alt="logo"
+                            alt="uniwork"
                         />
                     </Link>
                 </div>

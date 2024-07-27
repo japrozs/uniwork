@@ -1,0 +1,11 @@
+fragment PostSnippet on Post {
+    id
+    body
+    creator {
+        ...RegularUser
+    }
+    creatorId
+    createdAt
+    updatedAt
+    __typename
+}

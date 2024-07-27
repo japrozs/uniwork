@@ -12,6 +12,9 @@ import { createConnection } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { User } from "./entities/user";
 import { UserResolver } from "./resolvers/user-resolver";
+import { Post } from "./entities/post";
+import { PostResolver } from "./resolvers/post-resolver";
+import { faker } from "@faker-js/faker";
 
 const main = async () => {
     const conn = await createConnection({
@@ -20,9 +23,16 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [User],
+        entities: [User, Post],
     });
     await conn.runMigrations();
+
+    // for (let _ = 0; _ < 100; _++) {
+    //     await Post.create({
+    //         creatorId: "2",
+    //         body: faker.lorem.sentences(),
+    //     }).save();
+    // }
 
     const app = express();
 
@@ -58,7 +68,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver],
+            resolvers: [UserResolver, PostResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({

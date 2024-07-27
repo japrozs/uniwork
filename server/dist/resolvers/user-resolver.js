@@ -136,6 +136,7 @@ let UserResolver = class UserResolver {
                 name: options.name,
                 email: options.email,
                 password: hashedPassword,
+                username: options.username,
             })
                 .returning("*")
                 .execute();
