@@ -1,5 +1,6 @@
 import { useMeQuery } from "@/generated/graphql";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { BiSolidInbox } from "react-icons/bi";
 import { FiCompass } from "react-icons/fi";
@@ -12,6 +13,15 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
     const { data } = useMeQuery();
     return (
         <div className="pr-2 pt-2">
+            <Link href="/app/">
+                <Image
+                    src="/logo.svg"
+                    className="h-7 w-auto mb-6"
+                    height={20}
+                    width={20}
+                    alt="uniwork"
+                />
+            </Link>
             <a href="/app">
                 <div className="flex items-center text-slate-800 cursor-pointer mb-1.5 p-1.5 bg-gray-100 rounded-sm">
                     <GoHomeFill className="mr-4 text-xl " />{" "}
