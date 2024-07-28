@@ -94,3 +94,11 @@ body {
         scrollbar-width: none; /* Firefox */
     }
 }
+
+* {
+    -ms-overflow-style: none !important; /* IE and Edge */
+    scrollbar-width: none !important; /* Firefox */
+}
+*::-webkit-scrollbar {
+    display: none !important;
+}
