@@ -84,9 +84,15 @@ const AppIndexPage: React.FC<AppIndexPageProps> = ({}) => {
                                     )}
                                 </div>
                                 <div
-                                    className={`${
-                                        isActive ? "opacity-100" : "opacity-0"
-                                    } transition-all absolute mt-0.5 left-0 right-0 bg-white border border-gray-100 rounded-md shadow-sm z-10 max-h-60 overflow-y-auto`}
+                                    className={`
+                                        absolute mt-0.5 left-0 right-0 bg-white border border-gray-100 rounded-md shadow-sm z-10 overflow-y-auto
+                                        transition-opacity ease-in-out
+                                        ${
+                                            isActive
+                                                ? "opacity-100 max-h-60 visible"
+                                                : "opacity-0 max-h-0 invisible pointer-events-none"
+                                        }
+                                    `}
                                 >
                                     <div className="px-3 py-2.5">
                                         <p className="text-sm font-semibold">
