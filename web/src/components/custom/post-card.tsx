@@ -1,7 +1,7 @@
 import { PostSnippetFragment } from "@/generated/graphql";
 import Image from "next/image";
 import React from "react";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
 import { RiShare2Line } from "react-icons/ri";
@@ -50,9 +50,15 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <div className="flex items-center w-full">
                     <div className="flex items-center  text-gray-600 ">
                         <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
-                            <AiOutlineHeart className="text-xl" />
+                            {post.likeStatus ? (
+                                <AiFillHeart className="text-xl text-red-500" />
+                            ) : (
+                                <AiOutlineHeart className="text-xl hover:fill-red-500" />
+                            )}
                         </div>
-                        <p className="text-sm font-semibold text-black">2</p>
+                        <p className="text-sm font-semibold text-black">
+                            {post.likes}
+                        </p>
                     </div>
                     <div className="ml-6 flex items-center text-gray-600">
                         <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">

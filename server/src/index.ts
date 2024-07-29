@@ -17,6 +17,8 @@ import { PostResolver } from "./resolvers/post-resolver";
 import { faker } from "@faker-js/faker";
 import { Comment } from "./entities/comment";
 import { CommentResolver } from "./resolvers/comment-resolver";
+import { Like } from "./entities/like";
+import { createLikeLoader } from "./utils/create-like-loader";
 
 const main = async () => {
     const conn = await createConnection({
@@ -25,7 +27,7 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [User, Post, Comment],
+        entities: [User, Post, Comment, Like],
     });
     await conn.runMigrations();
 
@@ -93,6 +95,7 @@ const main = async () => {
             req,
             res,
             redis,
+            likeLoader: createLikeLoader(),
         }),
     });
 

@@ -41,6 +41,7 @@ export type Mutation = {
   createComment: Comment;
   createPost: Post;
   forgotPassword: Scalars['Boolean']['output'];
+  like: Scalars['Boolean']['output'];
   login: UserResponse;
   logout: Scalars['Boolean']['output'];
   register: UserResponse;
@@ -70,6 +71,11 @@ export type MutationForgotPasswordArgs = {
 };
 
 
+export type MutationLikeArgs = {
+  postId: Scalars['String']['input'];
+};
+
+
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -93,6 +99,8 @@ export type Post = {
   creator: User;
   creatorId: Scalars['Float']['output'];
   id: Scalars['String']['output'];
+  likeStatus?: Maybe<Scalars['Int']['output']>;
+  likes: Scalars['Float']['output'];
   updatedAt: Scalars['String']['output'];
 };
 
@@ -134,7 +142,7 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostSnippetFragment = { __typename: 'Post', id: string, body: string, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string } }> };
+export type PostSnippetFragment = { __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string } }> };
 
 export type RegularCommentFragment = { __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string } };
 
@@ -167,7 +175,7 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename: 'Post', id: string, body: string, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string } }> }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, createdAt: string, updatedAt: string } }> }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -210,6 +218,8 @@ export const PostSnippetFragmentDoc = gql`
   comments {
     ...RegularComment
   }
+  likes
+  likeStatus
   creatorId
   createdAt
   updatedAt

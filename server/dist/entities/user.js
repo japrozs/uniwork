@@ -14,6 +14,7 @@ const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const post_1 = require("./post");
 const comment_1 = require("./comment");
+const like_1 = require("./like");
 let User = class User extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -55,6 +56,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => comment_1.Comment, (comment) => comment.creator),
     __metadata("design:type", Array)
 ], User.prototype, "comments", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => like_1.Like, (like) => like.user),
+    __metadata("design:type", Array)
+], User.prototype, "likes", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.CreateDateColumn)(),
