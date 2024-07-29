@@ -9,23 +9,9 @@ import { TbMessage } from "react-icons/tb";
 
 interface PostCardProps {
     post: PostSnippetFragment;
-    setShowCommentsData: React.Dispatch<
-        React.SetStateAction<{
-            message?: string;
-        }>
-    >;
-    setShowLikesData: React.Dispatch<
-        React.SetStateAction<{
-            message?: string;
-        }>
-    >;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({
-    post,
-    setShowCommentsData,
-    setShowLikesData,
-}) => {
+export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     return (
         <div className="flex items-start space-x-3 p-3 rounded-md mb-3 border border-gray-100">
             <div>
@@ -63,30 +49,18 @@ export const PostCard: React.FC<PostCardProps> = ({
                 <hr className="border-t border-gray-100 mt-2.5 mb-1.5" />
                 <div className="flex items-center w-full">
                     <div className="flex items-center  text-gray-600 ">
-                        <div
-                            onClick={() => {
-                                setShowLikesData({
-                                    message: "this is the likes message",
-                                });
-                            }}
-                            className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
-                        >
+                        <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
                             <AiOutlineHeart className="text-xl" />
                         </div>
                         <p className="text-sm font-semibold text-black">2</p>
                     </div>
                     <div className="ml-6 flex items-center text-gray-600">
-                        <div
-                            onClick={() => {
-                                setShowCommentsData({
-                                    message: "this is the comments message",
-                                });
-                            }}
-                            className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
-                        >
+                        <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
                             <TbMessage className="text-xl" />
                         </div>
-                        <p className="text-sm font-semibold text-black">17</p>
+                        <p className="text-sm font-semibold text-black">
+                            {post.comments.length}
+                        </p>
                     </div>
                     <div className="ml-auto mr-0 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer">
                         <RiShare2Line className="text-xl" />

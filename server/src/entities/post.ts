@@ -7,8 +7,10 @@ import {
     ManyToOne,
     CreateDateColumn,
     UpdateDateColumn,
+    OneToMany,
 } from "typeorm";
 import { User } from "./user";
+import { Comment } from "./comment";
 
 @ObjectType()
 @Entity()
@@ -27,7 +29,11 @@ export class Post extends BaseEntity {
 
     @Field()
     @Column()
-    creatorId: string;
+    creatorId: number;
+
+    @Field(() => [Comment])
+    @OneToMany(() => Comment, (comment) => comment.post)
+    comments: Comment[];
 
     @Field(() => String)
     @CreateDateColumn()

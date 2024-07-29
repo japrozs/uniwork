@@ -74,6 +74,11 @@ export class PostResolver {
 
     @Query(() => [Post])
     async getPosts() {
-        return Post.find({ relations: ["creator"] });
+        return Post.find({
+            relations: ["creator", "comments", "comments.creator"],
+            order: {
+                createdAt: "DESC",
+            },
+        });
     }
 }

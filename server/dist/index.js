@@ -19,6 +19,8 @@ const user_1 = require("./entities/user");
 const user_resolver_1 = require("./resolvers/user-resolver");
 const post_1 = require("./entities/post");
 const post_resolver_1 = require("./resolvers/post-resolver");
+const comment_1 = require("./entities/comment");
+const comment_resolver_1 = require("./resolvers/comment-resolver");
 const main = async () => {
     const conn = await (0, typeorm_1.createConnection)({
         type: "postgres",
@@ -26,7 +28,7 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [user_1.User, post_1.Post],
+        entities: [user_1.User, post_1.Post, comment_1.Comment],
     });
     await conn.runMigrations();
     const app = (0, express_1.default)();
@@ -56,7 +58,7 @@ const main = async () => {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [user_resolver_1.UserResolver, post_resolver_1.PostResolver],
+            resolvers: [user_resolver_1.UserResolver, post_resolver_1.PostResolver, comment_resolver_1.CommentResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({

@@ -15,6 +15,8 @@ import { UserResolver } from "./resolvers/user-resolver";
 import { Post } from "./entities/post";
 import { PostResolver } from "./resolvers/post-resolver";
 import { faker } from "@faker-js/faker";
+import { Comment } from "./entities/comment";
+import { CommentResolver } from "./resolvers/comment-resolver";
 
 const main = async () => {
     const conn = await createConnection({
@@ -23,9 +25,25 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [User, Post],
+        entities: [User, Post, Comment],
     });
     await conn.runMigrations();
+
+    // const posts = await Post.find({});
+
+    // for (let i = 0; i < posts.length; i++) {
+    //     console.log("here");
+    //     const p = posts[i];
+    //     const len = Math.floor(Math.random() * 10) + 1;
+
+    //     for (let k = 0; k < len; k++) {
+    //         await Comment.create({
+    //             postId: p.id,
+    //             creatorId: 3,
+    //             body: faker.hacker.phrase(),
+    //         }).save();
+    //     }
+    // }
 
     // for (let _ = 0; _ < 100; _++) {
     //     await Post.create({
@@ -68,7 +86,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [UserResolver, PostResolver],
+            resolvers: [UserResolver, PostResolver, CommentResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({
