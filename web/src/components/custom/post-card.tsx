@@ -1,6 +1,8 @@
-import { PostSnippetFragment } from "@/generated/graphql";
+import { PostSnippetFragment, useLikeMutation } from "@/generated/graphql";
+import { useApolloClient } from "@apollo/client";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { GoHeart } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
@@ -12,8 +14,21 @@ interface PostCardProps {
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+    const [likeMutation] = useLikeMutation();
+    const client = useApolloClient();
+    const router = useRouter();
+
+    const like = async (postId: string) => {
+        await likeMutation({
+            variables: {
+                postId,
+            },
+        });
+        await client.resetStore();
+    };
+
     return (
-        <div className="flex items-start space-x-3 p-3 rounded-md mb-3 border border-gray-100">
+        <div className="hover:bg-gray-50 cursor-pointer flex items-start space-x-3 p-3 rounded-md mb-3 border border-gray-100">
             <div>
                 <Image
                     src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
@@ -49,7 +64,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <hr className="border-t border-gray-100 mt-2.5 mb-1.5" />
                 <div className="flex items-center w-full">
                     <div className="flex items-center  text-gray-600 ">
-                        <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
+                        <div
+                            onClick={() => like(post.id)}
+                            className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
+                        >
                             {post.likeStatus ? (
                                 <AiFillHeart className="text-xl text-red-500" />
                             ) : (

@@ -102,3 +102,7 @@ body {
 *::-webkit-scrollbar {
     display: none !important;
 }
+
+.emoji-selector-root * {
+    font-family: "Inter" !important;
+}
