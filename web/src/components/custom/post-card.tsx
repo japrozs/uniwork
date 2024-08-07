@@ -28,7 +28,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     };
 
     return (
-        <div className="hover:bg-gray-50 cursor-pointer flex items-start space-x-3 p-3 rounded-md mb-3 border border-gray-100">
+        <div
+            onClick={() => router.push(`/app/p/${post.id}`)}
+            className="hover:bg-gray-50/30 cursor-pointer flex items-start space-x-3 p-3 rounded-md mb-3 border border-gray-100"
+        >
             <div>
                 <Image
                     src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
@@ -55,7 +58,13 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         </div>
                     </div>
                     <div className="ml-auto mr-0">
-                        <div className="hover:bg-gray-100 p-1 rounded-full cursor-pointer">
+                        <div
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                alert("info on post");
+                            }}
+                            className="hover:bg-gray-100 p-1 rounded-full cursor-pointer"
+                        >
                             <IoIosMore />
                         </div>
                     </div>
@@ -65,7 +74,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 <div className="flex items-center w-full">
                     <div className="flex items-center  text-gray-600 ">
                         <div
-                            onClick={() => like(post.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                like(post.id);
+                            }}
                             className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
                         >
                             {post.likeStatus ? (
@@ -79,14 +91,26 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         </p>
                     </div>
                     <div className="ml-6 flex items-center text-gray-600">
-                        <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
+                        <div
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                alert("comment on post");
+                            }}
+                            className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
+                        >
                             <TbMessage className="text-xl" />
                         </div>
                         <p className="text-sm font-semibold text-black">
                             {post.comments.length}
                         </p>
                     </div>
-                    <div className="ml-auto mr-0 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer">
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            alert("share post");
+                        }}
+                        className="ml-auto mr-0 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer"
+                    >
                         <RiShare2Line className="text-xl" />
                     </div>
                 </div>

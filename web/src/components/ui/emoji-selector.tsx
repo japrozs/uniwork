@@ -23,7 +23,7 @@ export const EmojiSelector: React.FC<EmojiSelectorProps> = ({
 }) => {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger className="p-1 hover:bg-gray-100  mr-1.5 rounded-full text-primary-color cursor-pointer">
+            <DropdownMenuTrigger className="p-1 hover:bg-blue-50  mr-1.5 rounded-full text-primary-color cursor-pointer">
                 <HiOutlineEmojiHappy className="text-xl" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="p-0 m-0 border-none">

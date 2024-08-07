@@ -41,7 +41,7 @@ const main = async () => {
     //     for (let k = 0; k < len; k++) {
     //         await Comment.create({
     //             postId: p.id,
-    //             creatorId: 3,
+    //             creatorId: 1,
     //             body: faker.hacker.phrase(),
     //         }).save();
     //     }
@@ -49,7 +49,7 @@ const main = async () => {
 
     // for (let _ = 0; _ < 100; _++) {
     //     await Post.create({
-    //         creatorId: "2",
+    //         creatorId: 1,
     //         body: faker.lorem.sentences(),
     //     }).save();
     // }

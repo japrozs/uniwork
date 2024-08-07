@@ -98,6 +98,18 @@ export class PostResolver {
         });
     }
 
+    @UseMiddleware(isAuth)
+    @Query(() => Post)
+    async getPost(
+        @Arg("id", () => String) id: string,
+        @Ctx() { req }: Context
+    ) {
+        return Post.findOne({
+            where: { id },
+            relations: ["creator", "comments", "comments.creator"],
+        });
+    }
+
     @Mutation(() => Boolean)
     @UseMiddleware(isAuth)
     async like(@Arg("postId") postId: string, @Ctx() { req }: Context) {

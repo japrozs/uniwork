@@ -1,0 +1,5 @@
+query getPost($id: String!) {
+    getPost(id: $id) {
+        ...PostSnippet
+    }
+}
