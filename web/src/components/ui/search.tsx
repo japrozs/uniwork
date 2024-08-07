@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
+import { IoSearch, IoSearchOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 
 interface SearchProps {}
@@ -31,13 +31,13 @@ export const Search: React.FC<SearchProps> = ({}) => {
                 className="sticky top-0 bg-white pb-4 relative"
             >
                 <div className="mx-0.5 focus-within:ring-2 flex items-center bg-gray-100 p-2 rounded-md">
-                    <IoSearchOutline className="ml-1.5 mr-3.5 text-gray-500 text-xl" />
+                    <IoSearch className="ml-1 mr-3 text-gray-400 text-xl" />
                     <input
                         value={query}
                         className="bg-gray-100 w-full focus:outline-none text-sm font-medium"
                         onChange={(e) => setQuery(e.target.value)}
                         onFocus={() => setIsActive(true)}
-                        placeholder="Michael Scott, Dunder Mifflin Inc."
+                        placeholder="Search"
                     />
                     {query.length !== 0 && (
                         <RxCross2
