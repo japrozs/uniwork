@@ -2,8 +2,8 @@
     "name": "root",
     "private": true,
     "workspaces": [
-        "web",
-        "server"
+        "server",
+        "web"
     ],
     "dependencies": {},
     "devDependencies": {
