@@ -29,16 +29,21 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
     };
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger className="focus:outline-none ml-auto mr-0">
+            <DropdownMenuTrigger className="hover:bg-gray-100 rounded-sm p-1 flex items-center w-full focus:outline-none ml-auto mr-0">
                 <Image
-                    src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
-                    className="h-7 w-7 rounded-md border border-gray-300"
+                    src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    className="h-7 w-7 rounded-full"
                     height={20}
                     width={20}
                     alt="avatar"
                 />
+                <div className="ml-2.5">
+                    <p className="text-sidebar-item line-clamp-1 truncate text-ellipsis g-sans font-medium text-gray-800">
+                        {data?.me?.name}
+                    </p>
+                </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-52 p-1 shadow-sm">
+            <DropdownMenuContent className="w-64 p-1 shadow-sm">
                 <DropdownMenuLabel>
                     <div className="flex items-center">
                         <div className="mr-0.5">
@@ -53,8 +58,8 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
                                         A
                                     </p> */}
                         <Image
-                            src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
-                            className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md border border-gray-300"
+                            src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                            className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"
                             height={20}
                             width={20}
                             alt="avatar"

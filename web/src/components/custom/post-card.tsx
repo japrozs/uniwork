@@ -34,8 +34,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         >
             <div>
                 <Image
-                    src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
-                    className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full border border-gray-300"
+                    src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                     height={20}
                     width={20}
                     alt="avatar"

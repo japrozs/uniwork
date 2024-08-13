@@ -31,6 +31,10 @@ export class User extends BaseEntity {
     @Column({ default: "" })
     bio: string;
 
+    @Field()
+    @Column({ default: "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png" })
+    avatar: string;
+
     // @Field()
     // @Column({ default: false })
     // verified: boolean;

@@ -4,6 +4,7 @@ fragment RegularUser on User {
     username
     email
     bio
+    avatar
     createdAt
     updatedAt
     __typename

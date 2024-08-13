@@ -6,6 +6,7 @@ import { BiSolidInbox } from "react-icons/bi";
 import { FiCompass } from "react-icons/fi";
 import { GoHomeFill } from "react-icons/go";
 import { IoNotifications, IoPeople } from "react-icons/io5";
+import { UserProfileDropdown } from "./user-profile-dropdown";
 
 interface SidebarProps {}
 
@@ -55,25 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
                 </div>
             </a>
             <div className="mt-5 mb-1.5 h-px bg-gray-100" />
-            <div className="hover:bg-gray-100 rounded-sm  mb-1.5 p-1.5 cursor-pointer">
-                <div className="flex items-center">
-                    <Image
-                        src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
-                        className="min-w-7 w-7 h-7 flex items-center justify-center rounded-md border border-gray-300"
-                        height={20}
-                        width={20}
-                        alt="avatar"
-                    />
-                    <div className="ml-2.5">
-                        <p className="text-sidebar-item line-clamp-1 truncate text-ellipsis g-sans font-medium text-gray-800">
-                            {data?.me?.name}
-                        </p>
-                        {/* <p className="text-xs line-clamp-1 font-medium text-gray-400">
-                        Standard User
-                    </p> */}
-                    </div>
-                </div>
-            </div>
+            <UserProfileDropdown />
         </div>
     );
 };

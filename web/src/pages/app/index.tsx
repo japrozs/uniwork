@@ -56,8 +56,8 @@ const Home: React.FC<HomeProps> = ({}) => {
                                 <div className="flex items-start space-x-3 p-3 border border-gray-100 rounded-md mb-3">
                                     <div>
                                         <Image
-                                            src="https://api.dicebear.com/9.x/notionists-neutral/png?seed=japrozs&flip=true"
-                                            className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full border border-gray-300"
+                                            src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                            className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                                             height={20}
                                             width={20}
                                             alt="avatar"
@@ -118,7 +118,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                         </div>
                     )}
                 </div>
-                <div className="w-[30%] overflow-y-auto pl-2 sticky top-0">
+                <div className="w-[30%] overflow-y-auto pl-2 pt-0.5 sticky top-0">
                     <Search />
                     <p className="text-sm font-semibold">Sidebar Section</p>
                 </div>
