@@ -34,7 +34,9 @@ __decorate([
 ], User.prototype, "username", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ default: "" }),
+    (0, typeorm_1.Column)({
+        default: "",
+    }),
     __metadata("design:type", String)
 ], User.prototype, "bio", void 0);
 __decorate([

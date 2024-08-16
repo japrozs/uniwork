@@ -8,6 +8,7 @@ import {
     useGetPostQuery,
     useLikeMutation,
 } from "@/generated/graphql";
+import { formatPostTime } from "@/utils";
 import { useApolloClient } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -69,20 +70,23 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                 <div className="w-full">
                                     <div className="flex items-start">
                                         <div>
-                                            <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
-                                                {data.getPost.creator.name}
-                                            </p>
-                                            <div className="flex items-center mb-1.5 text-gray-500">
-                                                <p className="text-xs menlo hover:text-blue-500 hover:underline cursor-pointer">
-                                                    @
-                                                    {
-                                                        data.getPost.creator
-                                                            .username
-                                                    }
+                                            <div className="flex items-center">
+                                                <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
+                                                    {data.getPost.creator.name}
                                                 </p>
-                                                <span className="text-xs mx-1">
+                                                {/* <p className="ml-1.5 text-xs menlo hover:text-blue-500 hover:underline cursor-pointer  text-gray-500">
+                                @{post.creator.username}
+                            </p> */}
+                                                <span className="text-xs mx-1 text-gray-500">
                                                     •
                                                 </span>
+                                                <p className="text-xs line-clamp-1 font-medium text-gray-500">
+                                                    {formatPostTime(
+                                                        data.getPost.createdAt
+                                                    )}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center mb-1.5 text-gray-500">
                                                 <p className="text-xs line-clamp-1 font-medium">
                                                     {data.getPost.creator.bio}
                                                 </p>
@@ -154,6 +158,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                     <CommentCard comment={c} key={i} />
                                 )
                             )}
+                            <div className="pt-52" />
                         </div>
                     ) : (
                         <div className="w-full mx-auto mt-[10vh]">

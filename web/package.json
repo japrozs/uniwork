@@ -18,6 +18,7 @@
         "emoji-picker-react": "^4.11.1",
         "formik": "^2.4.6",
         "lucide-react": "^0.408.0",
+        "moment": "^2.30.1",
         "next": "14.2.4",
         "next-transition-bar": "^1.1.1",
         "react": "^18",

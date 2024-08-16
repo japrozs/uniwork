@@ -8,6 +8,8 @@ import { GoHeart } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
 import { RiShare2Line } from "react-icons/ri";
 import { TbMessage } from "react-icons/tb";
+import moment from "moment";
+import { formatPostTime } from "@/utils";
 
 interface PostCardProps {
     post: PostSnippetFragment;
@@ -44,14 +46,21 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <div className="w-full">
                 <div className="flex items-start">
                     <div>
-                        <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
-                            {post.creator.name}
-                        </p>
-                        <div className="flex items-center mb-1.5 text-gray-500">
-                            <p className="text-xs menlo hover:text-blue-500 hover:underline cursor-pointer">
-                                @{post.creator.username}
+                        <div className="flex items-center">
+                            <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
+                                {post.creator.name}
                             </p>
-                            <span className="text-xs mx-1">•</span>
+                            {/* <p className="ml-1.5 text-xs menlo hover:text-blue-500 hover:underline cursor-pointer  text-gray-500">
+                                @{post.creator.username}
+                            </p> */}
+                            <span className="text-xs mx-1 text-gray-500">
+                                •
+                            </span>
+                            <p className="text-xs line-clamp-1 font-medium text-gray-500">
+                                {formatPostTime(post.createdAt)}
+                            </p>
+                        </div>
+                        <div className="flex items-center mb-1.5 text-gray-500">
                             <p className="text-xs line-clamp-1 font-medium">
                                 {post.creator.bio}
                             </p>

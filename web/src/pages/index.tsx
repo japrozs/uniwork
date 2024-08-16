@@ -1,6 +1,8 @@
+import { useIsAuth } from "@/utils/use-is-auth";
 import React from "react";
 
 export default function Home() {
+    useIsAuth();
     return (
         <div>
             <img src="logo.png" className="w-auto h-8" />

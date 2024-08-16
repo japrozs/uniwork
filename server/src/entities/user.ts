@@ -28,7 +28,9 @@ export class User extends BaseEntity {
     username: string;
 
     @Field()
-    @Column({ default: "" })
+    @Column({
+        default: "",
+    })
     bio: string;
 
     @Field()
