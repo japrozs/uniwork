@@ -9,7 +9,7 @@ import { IoIosMore } from "react-icons/io";
 import { RiShare2Line } from "react-icons/ri";
 import { TbMessage } from "react-icons/tb";
 import moment from "moment";
-import { formatPostTime } from "@/utils";
+import { formatPostTime, shortenText, shouldShortenText } from "@/utils";
 
 interface PostCardProps {
     post: PostSnippetFragment;
@@ -19,6 +19,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     const [likeMutation] = useLikeMutation();
     const client = useApolloClient();
     const router = useRouter();
+    const [showFullBody, setShowFullBody] = useState(false);
 
     const like = async (postId: string) => {
         await likeMutation({
@@ -78,7 +79,41 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         </div>
                     </div>
                 </div>
-                <p className="text-sm font-medium">{post.body}</p>
+                {shouldShortenText(post.body) ? (
+                    <>
+                        {showFullBody ? (
+                            <pre className="text-sm font-medium whitespace-pre-wrap break-words">
+                                {post.body}
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowFullBody(!showFullBody);
+                                    }}
+                                    className="text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                >
+                                    Show less
+                                </span>
+                            </pre>
+                        ) : (
+                            <pre className="text-sm font-medium whitespace-pre-wrap break-words">
+                                {shortenText(post.body)}...
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setShowFullBody(!showFullBody);
+                                    }}
+                                    className="text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                >
+                                    Show more
+                                </span>
+                            </pre>
+                        )}
+                    </>
+                ) : (
+                    <pre className="text-sm font-medium whitespace-pre-wrap break-words">
+                        {post.body}
+                    </pre>
+                )}
                 <hr className="border-t border-gray-100 mt-2.5 mb-1.5" />
                 <div className="flex items-center w-full">
                     <div className="flex items-center  text-gray-600 ">
@@ -100,13 +135,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         </p>
                     </div>
                     <div className="ml-6 flex items-center text-gray-600">
-                        <div
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                alert("comment on post");
-                            }}
-                            className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
-                        >
+                        <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
                             <TbMessage className="text-xl" />
                         </div>
                         <p className="text-sm font-semibold text-black">

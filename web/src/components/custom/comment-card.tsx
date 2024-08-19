@@ -32,7 +32,9 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
                         {formatPostTime(comment.updatedAt)}
                     </p>
                 </div>
-                <p className="text-sm text-gray-700">{comment.body}</p>
+                <p className="text-sm text-gray-700 font-medium">
+                    {comment.body}
+                </p>
             </div>
         </div>
     );

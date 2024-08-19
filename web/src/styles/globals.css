@@ -106,3 +106,7 @@ body {
 .emoji-selector-root * {
     font-family: "Inter" !important;
 }
+
+* pre {
+    font-family: "Inter" !important;
+}

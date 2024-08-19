@@ -15,15 +15,21 @@ import { TbSettings, TbLogout2 } from "react-icons/tb";
 interface EmojiSelectorProps {
     text: string;
     setText: React.Dispatch<React.SetStateAction<string>>;
+    noMargin?: boolean;
 }
 
 export const EmojiSelector: React.FC<EmojiSelectorProps> = ({
     text,
     setText,
+    noMargin,
 }) => {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger className="p-1 hover:bg-blue-50  mr-1.5 rounded-full text-primary-color cursor-pointer">
+            <DropdownMenuTrigger
+                className={`p-1 hover:bg-blue-50  ${
+                    !noMargin && "mr-1.5"
+                } rounded-full text-primary-color cursor-pointer`}
+            >
                 <HiOutlineEmojiHappy className="text-xl" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="p-0 m-0 border-none">

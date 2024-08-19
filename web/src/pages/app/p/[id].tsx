@@ -2,9 +2,12 @@ import { CommentCard } from "@/components/custom/comment-card";
 import { Spinner } from "@/components/custom/spinner";
 import { UserProfileDropdown } from "@/components/custom/user-profile-dropdown";
 import { Wrapper } from "@/components/custom/wrapper";
+import { EmojiSelector } from "@/components/ui/emoji-selector";
+import TextareaAutosize from "react-textarea-autosize";
 import { Search } from "@/components/ui/search";
 import {
     RegularCommentFragment,
+    useCreateCommentMutation,
     useGetPostQuery,
     useLikeMutation,
 } from "@/generated/graphql";
@@ -12,11 +15,14 @@ import { formatPostTime } from "@/utils";
 import { useApolloClient } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import { comment } from "postcss";
+import React, { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IoIosMore, IoMdArrowBack } from "react-icons/io";
+import { LuImage } from "react-icons/lu";
 import { RiShare2Line } from "react-icons/ri";
 import { TbMessage } from "react-icons/tb";
+import { toast } from "sonner";
 
 interface PostPageProps {}
 
@@ -33,6 +39,9 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
             id,
         },
     });
+    const [commentBody, setCommentBody] = useState("");
+    const [createCommentMutation, { loading: commentLoading }] =
+        useCreateCommentMutation();
 
     const like = async (postId: string) => {
         await likeMutation({
@@ -41,6 +50,25 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
             },
         });
         await client.resetStore();
+    };
+
+    const createComment = async () => {
+        if (commentBody.trim().length > 200) {
+            toast.error("Replies cannot be more than 200 characters long.");
+        }
+        const resp = await createCommentMutation({
+            variables: {
+                postId: id,
+                body: commentBody,
+            },
+        });
+
+        if (resp.errors) {
+            toast.error("An error occured");
+        } else {
+            setCommentBody("");
+            await client.resetStore();
+        }
     };
     return (
         <Wrapper>
@@ -104,9 +132,9 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="text-sm font-medium">
+                                    <pre className="text-sm font-medium whitespace-pre-wrap break-words">
                                         {data.getPost.body}
-                                    </p>
+                                    </pre>
                                     <div className="flex items-center w-full mt-3">
                                         <div className="flex items-center  text-gray-600 ">
                                             <div
@@ -152,7 +180,74 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                     </div>
                                 </div>
                             </div>
-                            <hr className="border-t border-gray-100 my-1.5" />
+                            <hr className="border-t border-gray-100 my-1.5 mb-0" />
+                            <div>
+                                <div className="flex items-start space-x-3 p-3 rounded-md">
+                                    <div>
+                                        <Image
+                                            src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                            className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
+                                            height={20}
+                                            width={20}
+                                            alt="avatar"
+                                        />
+                                    </div>
+                                    <div className="w-full">
+                                        {/* TODO:  make this an autoexpandable text area */}
+                                        {/* <input
+                                            
+                                        /> */}
+                                        <TextareaAutosize
+                                            placeholder="Post your reply"
+                                            className="text-sm font-medium text-black pt-1.5 pl-1 rounded-md w-full focus:outline-none textarea break-words cursor-text resize-none"
+                                            onChange={(e) =>
+                                                setCommentBody(e.target.value)
+                                            }
+                                            value={commentBody}
+                                            maxLength={200}
+                                        />
+                                        <div className="flex items-center">
+                                            <EmojiSelector
+                                                text={commentBody}
+                                                setText={setCommentBody}
+                                                noMargin
+                                            />
+                                            <span className="text-xs mr-1.5 text-gray-500">
+                                                •
+                                            </span>
+                                            <p className="text-xs font-medium text-slate-600">
+                                                Replying to
+                                                <a
+                                                    href={`/app/u/${data.getPost.creator.username}`}
+                                                    className="ml-0.5 text-blue-500 whitespace-nowrap py-0.5 px-1 hover:bg-blue-50 rounded-md cursor-pointer"
+                                                >
+                                                    @
+                                                    {
+                                                        data.getPost.creator
+                                                            .username
+                                                    }
+                                                </a>
+                                            </p>
+                                            <button
+                                                onClick={() => createComment}
+                                                className={`ml-auto mr-0 bg-primary-color ${
+                                                    (commentBody.length === 0 ||
+                                                        commentLoading) &&
+                                                    "bg-opacity-60 cursor-not-allowed"
+                                                } py-1.5 px-6 font-medium rounded-md text-white text-sm`}
+                                                disabled={
+                                                    commentBody.length === 0 ||
+                                                    commentLoading
+                                                }
+                                            >
+                                                Reply
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* <hr className="mt-2 mb-5" /> */}
+                                <hr className="border-t border-gray-100 mt-0 my-1.5" />
+                            </div>
                             {data.getPost.comments.map(
                                 (c: RegularCommentFragment, i: number) => (
                                     <CommentCard comment={c} key={i} />
