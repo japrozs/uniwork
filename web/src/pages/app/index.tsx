@@ -6,6 +6,7 @@ import { Wrapper } from "@/components/custom/wrapper";
 import {
     PostSnippetFragment,
     RegularCommentFragment,
+    useCreatePostMutation,
     useGetPostsQuery,
     useMeQuery,
 } from "@/generated/graphql";
@@ -32,6 +33,9 @@ import TextareaAutosize from "react-textarea-autosize";
 import EmojiPicker from "emoji-picker-react";
 import { EmojiSelector } from "@/components/ui/emoji-selector";
 import { Search } from "@/components/ui/search";
+import { toast } from "sonner";
+import { useApolloClient } from "@apollo/client";
+import { useRouter } from "next/router";
 
 interface HomeProps {}
 
@@ -40,6 +44,26 @@ const Home: React.FC<HomeProps> = ({}) => {
     const { data, loading } = useGetPostsQuery();
     const [postBody, setPostBody] = useState("");
     const [postInputActive, setPostInputActive] = useState(false);
+    const [createPostMutation, { loading: postLoading }] =
+        useCreatePostMutation();
+    const client = useApolloClient();
+    const router = useRouter();
+
+    const createPost = async () => {
+        const resp = await createPostMutation({
+            variables: {
+                body: postBody,
+            },
+        });
+
+        if (resp.errors) {
+            toast.error("An error occured");
+        } else {
+            router.push(`/app/p/${resp.data?.createPost.id}`);
+            setPostBody("");
+            await client.resetStore();
+        }
+    };
 
     return (
         <Wrapper>
@@ -97,11 +121,16 @@ const Home: React.FC<HomeProps> = ({}) => {
                                                 setText={setPostBody}
                                             />
                                             <button
+                                                onClick={createPost}
                                                 className={`ml-auto mr-0 bg-primary-color ${
-                                                    postBody.length === 0 &&
+                                                    (postBody.length === 0 ||
+                                                        postLoading) &&
                                                     "bg-opacity-60 cursor-not-allowed"
                                                 } py-1.5 px-6 font-medium rounded-md text-white text-sm`}
-                                                disabled={postBody.length === 0}
+                                                disabled={
+                                                    postBody.length === 0 ||
+                                                    postLoading
+                                                }
                                             >
                                                 Post
                                             </button>

@@ -43,9 +43,6 @@ export class PostResolver {
     @UseMiddleware(isAuth)
     @Mutation(() => Post)
     async createPost(@Arg("body") body: string, @Ctx() { req }: Context) {
-        if (body.trim().length == 0) {
-            return false;
-        }
         return Post.create({
             body,
             creatorId: req.session.userId,
