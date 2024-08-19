@@ -1,4 +1,4 @@
-import { getConnection, getManager, LessThan } from "typeorm";
+import { getConnection, getManager, getRepository, LessThan } from "typeorm";
 import { Post } from "../entities/post";
 import { isAuth } from "../middleware/is-auth";
 import { Context } from "../types";
@@ -101,10 +101,24 @@ export class PostResolver {
         @Arg("id", () => String) id: string,
         @Ctx() { req }: Context
     ) {
-        return Post.findOne({
-            where: { id },
-            relations: ["creator", "comments", "comments.creator"],
-        });
+        // return Post.findOne({
+        //     where: { id },
+        //     relations: ["creator", "comments", "comments.creator"],
+        //     order: {
+        //         comments: {
+        //             createdAt: "DESC"
+        //         }
+        //     }
+        // });
+
+        return await getRepository(Post)
+            .createQueryBuilder("post")
+            .where("post.id = :id", { id })
+            .leftJoinAndSelect("post.creator", "creator")
+            .leftJoinAndSelect("post.comments", "comments")
+            .leftJoinAndSelect("comments.creator", "commentCreator")
+            .orderBy("comments.createdAt", "DESC")
+            .getOne();
     }
 
     @Mutation(() => Boolean)

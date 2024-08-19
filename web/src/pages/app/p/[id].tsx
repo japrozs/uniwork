@@ -23,6 +23,8 @@ import { LuImage } from "react-icons/lu";
 import { RiShare2Line } from "react-icons/ri";
 import { TbMessage } from "react-icons/tb";
 import { toast } from "sonner";
+import { PostDisplayActionTray } from "@/components/custom/post-display-action-tray";
+import { PostActionTray } from "@/components/custom/post-action-tray";
 
 interface PostPageProps {}
 
@@ -96,88 +98,16 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                     />
                                 </div>
                                 <div className="w-full">
-                                    <div className="flex items-start">
-                                        <div>
-                                            <div className="flex items-center">
-                                                <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
-                                                    {data.getPost.creator.name}
-                                                </p>
-                                                {/* <p className="ml-1.5 text-xs menlo hover:text-blue-500 hover:underline cursor-pointer  text-gray-500">
-                                @{post.creator.username}
-                            </p> */}
-                                                <span className="text-xs mx-1 text-gray-500">
-                                                    •
-                                                </span>
-                                                <p className="text-xs line-clamp-1 font-medium text-gray-500">
-                                                    {formatPostTime(
-                                                        data.getPost.createdAt
-                                                    )}
-                                                </p>
-                                            </div>
-                                            <div className="flex items-center mb-1.5 text-gray-500">
-                                                <p className="text-xs line-clamp-1 font-medium">
-                                                    {data.getPost.creator.bio}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="ml-auto mr-0">
-                                            <div
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    alert("info on post");
-                                                }}
-                                                className="hover:bg-gray-100 p-1 rounded-full cursor-pointer"
-                                            >
-                                                <IoIosMore />
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <PostDisplayActionTray
+                                        post={data.getPost}
+                                    />
                                     <pre className="text-sm font-medium whitespace-pre-wrap break-words">
                                         {data.getPost.body}
                                     </pre>
-                                    <div className="flex items-center w-full mt-3">
-                                        <div className="flex items-center  text-gray-600 ">
-                                            <div
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    like(data.getPost.id);
-                                                }}
-                                                className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
-                                            >
-                                                {data.getPost.likeStatus ? (
-                                                    <AiFillHeart className="text-xl text-red-500" />
-                                                ) : (
-                                                    <AiOutlineHeart className="text-xl hover:fill-red-500" />
-                                                )}
-                                            </div>
-                                            <p className="text-sm font-semibold text-black">
-                                                {data.getPost.likes}
-                                            </p>
-                                        </div>
-                                        <div className="ml-6 flex items-center text-gray-600">
-                                            <div
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    alert("comment on post");
-                                                }}
-                                                className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer"
-                                            >
-                                                <TbMessage className="text-xl" />
-                                            </div>
-                                            <p className="text-sm font-semibold text-black">
-                                                {data.getPost.comments.length}
-                                            </p>
-                                        </div>
-                                        <div
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                alert("share post");
-                                            }}
-                                            className="ml-auto mr-0 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer"
-                                        >
-                                            <RiShare2Line className="text-xl" />
-                                        </div>
-                                    </div>
+                                    <PostActionTray
+                                        post={data.getPost}
+                                        className="text-red-500 mt-3"
+                                    />
                                 </div>
                             </div>
                             <hr className="border-t border-gray-100 my-1.5 mb-0" />
@@ -229,7 +159,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                                 </a>
                                             </p>
                                             <button
-                                                onClick={() => createComment}
+                                                onClick={createComment}
                                                 className={`ml-auto mr-0 bg-primary-color ${
                                                     (commentBody.length === 0 ||
                                                         commentLoading) &&
