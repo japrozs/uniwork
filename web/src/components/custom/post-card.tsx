@@ -27,7 +27,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         >
             <div>
                 <Image
-                    src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    src={
+                        post.creator.avatar ||
+                        "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    }
                     className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                     height={20}
                     width={20}
@@ -46,7 +49,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                                         e.stopPropagation();
                                         setShowFullBody(!showFullBody);
                                     }}
-                                    className="ml-1.5 text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                    className="ml-1.5 text-blue-500 whitespace-nowrap font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
                                 >
                                     Show less
                                 </span>
@@ -59,7 +62,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                                         e.stopPropagation();
                                         setShowFullBody(!showFullBody);
                                     }}
-                                    className="text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                    className="text-blue-500 whitespace-nowrap font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
                                 >
                                     Show more
                                 </span>

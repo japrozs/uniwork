@@ -31,7 +31,10 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
         <DropdownMenu>
             <DropdownMenuTrigger className="hover:bg-gray-100 rounded-sm p-1 flex items-center w-full focus:outline-none ml-auto mr-0">
                 <Image
-                    src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    src={
+                        data?.me?.avatar ||
+                        "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    }
                     className="h-7 w-7 rounded-full"
                     height={20}
                     width={20}

@@ -18,7 +18,10 @@ export const UserHoverCard: React.FC<UserHoverCardProps> = ({ creator }) => {
             <div className="flex items-center">
                 <div>
                     <Image
-                        src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                        src={
+                            creator.avatar ||
+                            "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                        }
                         className="min-w-8 ml-auto mr-0 w-14 h-14 flex items-center justify-center rounded-full"
                         height={20}
                         width={20}

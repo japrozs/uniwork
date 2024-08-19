@@ -1,7 +1,14 @@
 import { RegularCommentFragment } from "@/generated/graphql";
 import { formatPostTime } from "@/utils";
+import {
+    HoverCard,
+    HoverCardTrigger,
+    HoverCardContent,
+} from "../ui/hover-card";
 import Image from "next/image";
+import router from "next/router";
 import React from "react";
+import { UserHoverCard } from "./user-hover-card";
 
 interface CommentCardProps {
     comment: RegularCommentFragment;
@@ -12,7 +19,10 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
         <div className="p-3 flex items-stretch space-x-3 border-b border-gray-100">
             <div>
                 <Image
-                    src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    src={
+                        comment.creator.avatar ||
+                        "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                    }
                     className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                     height={20}
                     width={20}
@@ -21,9 +31,16 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
             </div>
             <div>
                 <div className="flex items-center">
-                    <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
-                        {comment.creator.name}
-                    </p>
+                    <HoverCard>
+                        <HoverCardTrigger>
+                            <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
+                                {comment.creator.name}
+                            </p>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="p-0">
+                            <UserHoverCard creator={comment.creator} />
+                        </HoverCardContent>
+                    </HoverCard>
                     {/* <p className="ml-1.5 text-xs menlo hover:text-blue-500 hover:underline cursor-pointer  text-gray-500">
                                 @{post.creator.username}
                             </p> */}

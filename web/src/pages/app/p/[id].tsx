@@ -25,10 +25,12 @@ import { TbMessage } from "react-icons/tb";
 import { toast } from "sonner";
 import { PostDisplayActionTray } from "@/components/custom/post-display-action-tray";
 import { PostActionTray } from "@/components/custom/post-action-tray";
+import { useIsAuth } from "@/utils/use-is-auth";
 
 interface PostPageProps {}
 
 const PostPage: React.FC<PostPageProps> = ({}) => {
+    const { data: meData } = useIsAuth();
     const router = useRouter();
     const [likeMutation] = useLikeMutation();
     const client = useApolloClient();
@@ -90,7 +92,10 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                             <div className="flex items-start space-x-3 p-3">
                                 <div>
                                     <Image
-                                        src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                        src={
+                                            data.getPost.creator.avatar ||
+                                            "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                        }
                                         className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                                         height={20}
                                         width={20}
@@ -115,7 +120,10 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                 <div className="flex items-start space-x-3 p-3 rounded-md">
                                     <div>
                                         <Image
-                                            src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                            src={
+                                                meData?.me?.avatar ||
+                                                "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                            }
                                             className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                                             height={20}
                                             width={20}
