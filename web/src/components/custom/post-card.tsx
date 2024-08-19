@@ -46,7 +46,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                                         e.stopPropagation();
                                         setShowFullBody(!showFullBody);
                                     }}
-                                    className="text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
+                                    className="ml-1.5 text-blue-500 font-medium text-sm hover:bg-blue-50 py-0.5 px-1 rounded-md cursor-pointer"
                                 >
                                     Show less
                                 </span>

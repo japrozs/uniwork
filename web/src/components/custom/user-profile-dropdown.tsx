@@ -38,7 +38,7 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
                     alt="avatar"
                 />
                 <div className="ml-2.5">
-                    <p className="text-sidebar-item line-clamp-1 truncate text-ellipsis g-sans font-medium text-gray-800">
+                    <p className="text-sidebar-item text-sm line-clamp-1 truncate text-ellipsis g-sans font-medium text-gray-800">
                         {data?.me?.name}
                     </p>
                 </div>

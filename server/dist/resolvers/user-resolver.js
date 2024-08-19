@@ -125,6 +125,16 @@ let UserResolver = class UserResolver {
         if (errors) {
             return { errors };
         }
+        if (await user_1.User.findOne({ where: { email: options.email } })) {
+            return {
+                errors: [
+                    {
+                        field: "email",
+                        message: "email already taken",
+                    },
+                ],
+            };
+        }
         const hashedPassword = await argon2_1.default.hash(options.password);
         let user;
         try {
@@ -147,8 +157,8 @@ let UserResolver = class UserResolver {
                 return {
                     errors: [
                         {
-                            field: "email",
-                            message: "email already taken",
+                            field: "username",
+                            message: "username already taken",
                         },
                     ],
                 };

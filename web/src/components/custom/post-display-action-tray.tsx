@@ -2,6 +2,13 @@ import { PostSnippetFragment } from "@/generated/graphql";
 import { formatPostTime } from "@/utils";
 import React from "react";
 import { IoIosMore } from "react-icons/io";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { useRouter } from "next/router";
+import { UserHoverCard } from "./user-hover-card";
 
 interface PostDisplayActionTrayProps {
     post: PostSnippetFragment;
@@ -10,13 +17,29 @@ interface PostDisplayActionTrayProps {
 export const PostDisplayActionTray: React.FC<PostDisplayActionTrayProps> = ({
     post,
 }) => {
+    const router = useRouter();
     return (
         <div className="flex items-start">
             <div>
                 <div className="flex items-center">
-                    <p className="text-sm font-semibold w-max hover:underline cursor-pointer">
-                        {post.creator.name}
-                    </p>
+                    <HoverCard>
+                        <HoverCardTrigger>
+                            <p
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push(
+                                        `/app/u/${post.creator.username}`
+                                    );
+                                }}
+                                className="text-sm font-semibold w-max hover:underline cursor-pointer"
+                            >
+                                {post.creator.name}
+                            </p>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="p-0">
+                            <UserHoverCard creator={post.creator} />
+                        </HoverCardContent>
+                    </HoverCard>
                     {/* <p className="ml-1.5 text-xs menlo hover:text-blue-500 hover:underline cursor-pointer  text-gray-500">
                                 @{post.creator.username}
                             </p> */}

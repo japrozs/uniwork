@@ -26,33 +26,31 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
             <a href="/app">
                 <div className="flex items-center text-slate-800 cursor-pointer mb-1.5 p-1.5 bg-gray-100 rounded-sm">
                     <GoHomeFill className="mr-4 text-xl " />{" "}
-                    <p className="font-medium text-sidebar-item">Home</p>
+                    <p className="font-medium text-sm">Home</p>
                 </div>
             </a>
             <a href="/app/network">
                 <div className="flex items-center text-slate-600 cursor-pointer mb-1.5 p-1.5 hover:bg-gray-100 rounded-sm">
                     <IoPeople className="mr-4 text-xl text-slate-500" />{" "}
-                    <p className="font-medium text-sidebar-item">Network</p>
+                    <p className="font-medium text-sm">Network</p>
                 </div>
             </a>
             <a href="/app/explore">
                 <div className="flex items-center text-slate-600 cursor-pointer mb-1.5 p-1.5 hover:bg-gray-100 rounded-sm">
                     <FiCompass className="mr-4 text-xl text-slate-500" />{" "}
-                    <p className="font-medium text-sidebar-item">Explore</p>
+                    <p className="font-medium text-sm">Explore</p>
                 </div>
             </a>
             <a href="/app/inbox">
                 <div className="flex items-center text-slate-600 cursor-pointer mb-1.5 p-1.5 hover:bg-gray-100 rounded-sm">
                     <BiSolidInbox className="mr-4 text-xl text-slate-500" />{" "}
-                    <p className="font-medium text-sidebar-item">Inbox</p>
+                    <p className="font-medium text-sm">Inbox</p>
                 </div>
             </a>
             <a href="/app/notifications">
                 <div className="flex items-center text-slate-600 cursor-pointer mb-1.5 p-1.5 hover:bg-gray-100 rounded-sm">
                     <IoNotifications className="mr-4 text-xl text-slate-500" />{" "}
-                    <p className="font-medium text-sidebar-item">
-                        Notifications
-                    </p>
+                    <p className="font-medium text-sm">Notifications</p>
                 </div>
             </a>
             <div className="mt-5 mb-1.5 h-px bg-gray-100" />

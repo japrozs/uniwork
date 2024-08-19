@@ -5,6 +5,12 @@ import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { RiShare2Line } from "react-icons/ri";
 import { TbMessage } from "react-icons/tb";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type PostActionTrayProps = {
     post: PostSnippetFragment;
@@ -46,8 +52,9 @@ export const PostActionTray: React.FC<PostActionTrayProps> = ({
                         {post.likes}
                     </p>
                 </div>
+
                 <div className="ml-6 flex items-center text-gray-600">
-                    <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-black cursor-pointer">
+                    <div className="p-1 hover:bg-gray-100  mr-1.5 rounded-full hover:text-blue-500 cursor-pointer">
                         <TbMessage className="text-xl" />
                     </div>
                     <p className="text-sm font-semibold text-black">
