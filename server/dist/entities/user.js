@@ -46,6 +46,11 @@ __decorate([
 ], User.prototype, "avatar", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ default: "uploads/bliss.jpg" }),
+    __metadata("design:type", String)
+], User.prototype, "bg", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);

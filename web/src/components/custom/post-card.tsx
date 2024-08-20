@@ -1,4 +1,9 @@
-import { PostSnippetFragment, useLikeMutation } from "@/generated/graphql";
+import {
+    GetUserQuery,
+    GetUserQueryResult,
+    PostSnippetFragment,
+    useLikeMutation,
+} from "@/generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,17 +19,22 @@ import { PostDisplayActionTray } from "./post-display-action-tray";
 import { PostActionTray } from "./post-action-tray";
 import { ImagePreview } from "./image-preview";
 
+type UserPosts = GetUserQuery["getUser"]["posts"];
+type PostType = UserPosts[number];
 interface PostCardProps {
-    post: PostSnippetFragment;
+    post: PostSnippetFragment | PostType;
+    minimal?: boolean;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const PostCard: React.FC<PostCardProps> = ({ post, minimal }) => {
     const router = useRouter();
     const [showFullBody, setShowFullBody] = useState(false);
     return (
         <div
             onClick={() => router.push(`/app/p/${post.id}`)}
-            className="hover:bg-gray-50/30 cursor-pointer flex items-start space-x-3 p-3 rounded-md mb-3 border border-gray-100"
+            className={`hover:bg-gray-50/30 cursor-pointer flex items-start space-x-3 p-3 ${
+                minimal ? "border-b" : "rounded-md border"
+            } mb-3  border-gray-100`}
         >
             <div>
                 <Image

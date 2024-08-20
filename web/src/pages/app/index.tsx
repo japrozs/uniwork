@@ -100,7 +100,7 @@ const Home: React.FC<HomeProps> = ({}) => {
     return (
         <Wrapper>
             <div className="flex overflow-y-auto w-[80%] pt-3.5">
-                <div className="flex w-[70%] items-start">
+                <div className="flex w-[65%] items-start">
                     {!data && loading ? (
                         <div className="w-full mx-auto mt-[10vh]">
                             {/* try skeleton loaders instead of spinners */}
@@ -230,9 +230,11 @@ const Home: React.FC<HomeProps> = ({}) => {
                         </div>
                     )}
                 </div>
-                <div className="w-[30%] overflow-y-auto pl-2 pt-0.5 sticky top-0">
-                    <Search />
-                    <p className="text-sm font-semibold">Sidebar Section</p>
+                <div className="w-[35%] overflow-y-auto pl-2 pt-0.5 sticky top-0">
+                    <div className="w-full">
+                        <Search />
+                        <p className="text-sm font-semibold">Sidebar Section</p>
+                    </div>
                 </div>
             </div>
         </Wrapper>

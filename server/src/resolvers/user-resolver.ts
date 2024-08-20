@@ -9,7 +9,7 @@ import {
     Resolver,
     UseMiddleware,
 } from "type-graphql";
-import { getConnection } from "typeorm";
+import { getConnection, getRepository } from "typeorm";
 import { v4 } from "uuid";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { User } from "../entities/user";
@@ -201,6 +201,24 @@ export class UserResolver {
         // });
 
         return { user: us };
+    }
+
+    @UseMiddleware(isAuth)
+    @Query(() => User)
+    async getUser(
+        @Arg("username", () => String) username: string,
+        @Ctx() { req }: Context
+    ) {
+        return await getRepository(User)
+            .createQueryBuilder("user")
+            .where("user.username = :username", { username })
+            .leftJoinAndSelect("user.posts", "posts")
+            .leftJoinAndSelect("posts.creator", "postsCreator")
+            .leftJoinAndSelect("posts.comments", "postsComments")
+            .orderBy({
+                "posts.createdAt": "DESC",
+            })
+            .getOne();
     }
 
     @Mutation(() => UserResponse)

@@ -170,6 +170,18 @@ let UserResolver = class UserResolver {
         });
         return { user: us };
     }
+    async getUser(username, { req }) {
+        return await (0, typeorm_1.getRepository)(user_1.User)
+            .createQueryBuilder("user")
+            .where("user.username = :username", { username })
+            .leftJoinAndSelect("user.posts", "posts")
+            .leftJoinAndSelect("posts.creator", "postsCreator")
+            .leftJoinAndSelect("posts.comments", "postsComments")
+            .orderBy({
+            "posts.createdAt": "DESC",
+        })
+            .getOne();
+    }
     async login(email, password, { req }) {
         const user = await user_1.User.findOne({
             where: { email },
@@ -251,6 +263,15 @@ __decorate([
     __metadata("design:paramtypes", [user_input_1.UserInput, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
+__decorate([
+    (0, type_graphql_1.UseMiddleware)(is_auth_1.isAuth),
+    (0, type_graphql_1.Query)(() => user_1.User),
+    __param(0, (0, type_graphql_1.Arg)("username", () => String)),
+    __param(1, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "getUser", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("email")),

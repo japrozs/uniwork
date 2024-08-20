@@ -9,6 +9,7 @@ import {
 import { useLogoutMutation, useMeQuery } from "@/generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { CgProfile } from "react-icons/cg";
@@ -61,7 +62,10 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
                                         A
                                     </p> */}
                         <Image
-                            src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                            src={
+                                data?.me?.avatar ||
+                                "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                            }
                             className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"
                             height={20}
                             width={20}
@@ -70,10 +74,12 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer flex w-full text-sm items-center gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
-                    <CgProfile className="text-lg " />
-                    View Profile
-                </DropdownMenuItem>
+                <Link href={`/app/u/${data?.me?.username}`}>
+                    <DropdownMenuItem className="cursor-pointer flex w-full text-sm items-center gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
+                        <CgProfile className="text-lg " />
+                        View Profile
+                    </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
                     <TbSettings className="text-lg " />
                     Settings

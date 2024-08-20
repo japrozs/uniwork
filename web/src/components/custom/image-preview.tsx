@@ -1,8 +1,11 @@
-import { PostSnippetFragment } from "@/generated/graphql";
+import { GetUserQuery, PostSnippetFragment } from "@/generated/graphql";
 import React from "react";
 
+type UserPosts = GetUserQuery["getUser"]["posts"];
+type PostType = UserPosts[number];
+
 interface ImagePreviewProps {
-    post: PostSnippetFragment;
+    post: PostSnippetFragment | PostType;
     noClick?: boolean;
 }
 

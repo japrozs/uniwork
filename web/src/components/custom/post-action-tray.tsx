@@ -1,5 +1,9 @@
 import { DetailedHTMLProps } from "react";
-import { PostSnippetFragment, useLikeMutation } from "@/generated/graphql";
+import {
+    GetUserQuery,
+    PostSnippetFragment,
+    useLikeMutation,
+} from "@/generated/graphql";
 import { useApolloClient } from "@apollo/client";
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -19,8 +23,11 @@ import { copyToClipboard } from "@/utils";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 
+type UserPosts = GetUserQuery["getUser"]["posts"];
+type PostType = UserPosts[number];
+
 type PostActionTrayProps = {
-    post: PostSnippetFragment;
+    post: PostSnippetFragment | PostType;
 } & DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 export const PostActionTray: React.FC<PostActionTrayProps> = ({

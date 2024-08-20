@@ -25,10 +25,10 @@ export const Search: React.FC<SearchProps> = ({}) => {
         };
     }, []);
     return (
-        <div className="flex items-center space-x-5">
+        <div className="flex items-center space-x-5 w-full">
             <div
                 ref={searchRef}
-                className="sticky top-0 bg-white pb-4 relative"
+                className="sticky top-0 bg-white pb-4 relative w-full"
             >
                 <div className="mx-0.5 focus-within:ring-2 flex items-center bg-gray-100 p-2 rounded-md">
                     <IoSearch className="ml-1 mr-3 text-gray-400 text-xl" />

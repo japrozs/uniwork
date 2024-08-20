@@ -5,6 +5,7 @@ fragment RegularUser on User {
     email
     bio
     avatar
+    bg
     createdAt
     updatedAt
     __typename
