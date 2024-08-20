@@ -41,3 +41,14 @@ export const shortenText = (text: string): string => {
 
     return text;
 };
+
+export const copyToClipboard = (text: string): Promise<string> => {
+    return navigator.clipboard
+        .writeText(text)
+        .then(() => {
+            return "Copied to clipboard";
+        })
+        .catch((err) => {
+            return "Failed to copy";
+        });
+};

@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { PostDisplayActionTray } from "@/components/custom/post-display-action-tray";
 import { PostActionTray } from "@/components/custom/post-action-tray";
 import { useIsAuth } from "@/utils/use-is-auth";
+import Link from "next/link";
 
 interface PostPageProps {}
 
@@ -155,7 +156,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                             </span>
                                             <p className="text-xs font-medium text-slate-600">
                                                 Replying to
-                                                <a
+                                                <Link
                                                     href={`/app/u/${data.getPost.creator.username}`}
                                                     className="ml-0.5 text-blue-500 whitespace-nowrap py-0.5 px-1 hover:bg-blue-50 rounded-md cursor-pointer"
                                                 >
@@ -164,7 +165,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                                         data.getPost.creator
                                                             .username
                                                     }
-                                                </a>
+                                                </Link>
                                             </p>
                                             <button
                                                 onClick={createComment}
