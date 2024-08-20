@@ -37,7 +37,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                     <IoMdArrowBack className="text-xl" />
                                 </div>
                                 <p className="text-md font-semibold ml-3.5">
-                                    {data.getUser.name}
+                                    {data.getUser.name}{" "}
                                 </p>
                             </div>
                             <img
@@ -61,6 +61,9 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                 <div className="px-3">
                                     <p className="mt-2.5 text-md font-semibold">
                                         {data.getUser.name}
+                                        <span className="ml-1.5 text-xs font-medium border border-blue-100 text-blue-500 py-0.1 px-2 rounded-md bg-blue-50">
+                                            {data.getUser.id}
+                                        </span>
                                     </p>
                                     <p className="text-sm text-gray-500 menlo">
                                         @{data.getUser.username}
