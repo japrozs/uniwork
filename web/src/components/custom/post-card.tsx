@@ -12,6 +12,7 @@ import moment from "moment";
 import { formatPostTime, shortenText, shouldShortenText } from "@/utils";
 import { PostDisplayActionTray } from "./post-display-action-tray";
 import { PostActionTray } from "./post-action-tray";
+import { ImagePreview } from "./image-preview";
 
 interface PostCardProps {
     post: PostSnippetFragment;
@@ -74,6 +75,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
                         {post.body}
                     </pre>
                 )}
+                <ImagePreview post={post} noClick />
                 <hr className="border-t border-gray-100 mt-2.5 mb-1.5" />
                 <PostActionTray post={post} />
             </div>

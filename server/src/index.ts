@@ -19,7 +19,7 @@ import { Comment } from "./entities/comment";
 import { CommentResolver } from "./resolvers/comment-resolver";
 import { Like } from "./entities/like";
 import { createLikeLoader } from "./utils/create-like-loader";
-import postUpload from "./upload/post";
+import postUpload from "./upload/post-upload";
 
 const main = async () => {
     const conn = await createConnection({
