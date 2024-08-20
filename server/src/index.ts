@@ -19,6 +19,7 @@ import { Comment } from "./entities/comment";
 import { CommentResolver } from "./resolvers/comment-resolver";
 import { Like } from "./entities/like";
 import { createLikeLoader } from "./utils/create-like-loader";
+import postUpload from "./upload/post";
 
 const main = async () => {
     const conn = await createConnection({
@@ -99,7 +100,8 @@ const main = async () => {
         }),
     });
 
-    // app.use("/upload/", avatarUpload);
+    app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+    app.use("/upload/", postUpload);
 
     apolloServer.applyMiddleware({
         app,

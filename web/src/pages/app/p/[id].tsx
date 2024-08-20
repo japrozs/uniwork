@@ -27,13 +27,13 @@ import { PostDisplayActionTray } from "@/components/custom/post-display-action-t
 import { PostActionTray } from "@/components/custom/post-action-tray";
 import { useIsAuth } from "@/utils/use-is-auth";
 import Link from "next/link";
+import { ImagePreview } from "@/components/custom/image-preview";
 
 interface PostPageProps {}
 
 const PostPage: React.FC<PostPageProps> = ({}) => {
     const { data: meData } = useIsAuth();
     const router = useRouter();
-    const [likeMutation] = useLikeMutation();
     const client = useApolloClient();
     const id =
         typeof router.query.id == "string"
@@ -47,15 +47,6 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
     const [commentBody, setCommentBody] = useState("");
     const [createCommentMutation, { loading: commentLoading }] =
         useCreateCommentMutation();
-
-    const like = async (postId: string) => {
-        await likeMutation({
-            variables: {
-                postId,
-            },
-        });
-        await client.resetStore();
-    };
 
     const createComment = async () => {
         if (commentBody.trim().length > 200) {
@@ -75,6 +66,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
             await client.resetStore();
         }
     };
+
     return (
         <Wrapper>
             <div className="flex overflow-y-auto w-[80%]">
@@ -110,6 +102,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                     <pre className="text-sm font-medium whitespace-pre-wrap break-words">
                                         {data.getPost.body}
                                     </pre>
+                                    <ImagePreview post={data.getPost} />
                                     <PostActionTray
                                         post={data.getPost}
                                         className="text-red-500 mt-3"

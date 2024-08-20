@@ -46,6 +46,10 @@ export class Post extends BaseEntity {
     @Field(() => Int, { nullable: true })
     likeStatus: number | null;
 
+    @Field(() => [String])
+    @Column("json", { default: [] })
+    attachments: string[];
+
     @Field(() => String)
     @CreateDateColumn()
     createdAt: Date;

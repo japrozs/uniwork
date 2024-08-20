@@ -36,32 +36,64 @@ import { Search } from "@/components/ui/search";
 import { toast } from "sonner";
 import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
+import Axios from "axios";
 
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = ({}) => {
-    const { data: meData } = useIsAuth();
     const { data, loading } = useGetPostsQuery();
     const [postBody, setPostBody] = useState("");
     const [postInputActive, setPostInputActive] = useState(false);
-    const [createPostMutation, { loading: postLoading }] =
-        useCreatePostMutation();
     const client = useApolloClient();
     const router = useRouter();
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
+    const [submitLoading, setSubmitLoading] = useState(false);
 
     const createPost = async () => {
-        const resp = await createPostMutation({
-            variables: {
-                body: postBody,
-            },
+        setSubmitLoading(true);
+        const formData = new FormData();
+        formData.append("body", postBody);
+
+        selectedImages.forEach((image) => {
+            formData.append("files", image);
         });
 
-        if (resp.errors) {
-            toast.error("An error occured");
-        } else {
-            router.push(`/app/p/${resp.data?.createPost.id}`);
-            setPostBody("");
-            await client.resetStore();
+        try {
+            const res = await Axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/upload/post`,
+                formData,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    withCredentials: true,
+                }
+            );
+
+            if (res.data.message) {
+                // an error occured
+                toast.error("An error occured");
+            } else {
+                router.push(`/app/p/${res.data?.id}`);
+                setPostBody("");
+                await client.resetStore();
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setSubmitLoading(false); // Set loading to false after finishing
+        }
+    };
+
+    const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const newImages = Array.from(event.target.files);
+            if (selectedImages.length + newImages.length > 4) {
+                console.error(
+                    "Error: You can only upload a maximum of 4 images."
+                );
+                toast.error("Please choose a maximum of 4 images.");
+                return;
+            }
+            setSelectedImages((prevImages) => [...prevImages, ...newImages]);
         }
     };
 
@@ -106,16 +138,67 @@ const Home: React.FC<HomeProps> = ({}) => {
                                             }
                                             value={postBody}
                                         />
-                                        {/* TODO: add tooltips */}
+                                        {selectedImages.length > 0 && (
+                                            <div className="flex flex-wrap mt-2">
+                                                {selectedImages.map(
+                                                    (image, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className="relative m-1"
+                                                        >
+                                                            <img
+                                                                src={URL.createObjectURL(
+                                                                    image
+                                                                )}
+                                                                alt={`preview ${index}`}
+                                                                className="w-auto h-44 object-cover rounded"
+                                                            />
+                                                            <button
+                                                                onClick={() =>
+                                                                    setSelectedImages(
+                                                                        (
+                                                                            images
+                                                                        ) =>
+                                                                            images.filter(
+                                                                                (
+                                                                                    _,
+                                                                                    i
+                                                                                ) =>
+                                                                                    i !==
+                                                                                    index
+                                                                            )
+                                                                    )
+                                                                }
+                                                                className="absolute top-3 right-3 bg-gray-800 text-white rounded-full p-0.5"
+                                                            >
+                                                                <RxCross2 className="text-lg" />
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </div>
+                                        )}
                                         <hr
                                             className={`mt-0 mb-2 ${
                                                 !postInputActive && "opacity-0"
                                             }`}
                                         />
                                         <div className="flex items-start">
-                                            <div className="p-1 hover:bg-blue-50  mr-1.5 rounded-full text-primary-color cursor-pointer">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                multiple
+                                                max="4"
+                                                onChange={handleImageSelect}
+                                                style={{ display: "none" }}
+                                                id="image-input"
+                                            />
+                                            <label
+                                                htmlFor="image-input"
+                                                className="p-1 hover:bg-blue-50  mr-1.5 rounded-full text-primary-color cursor-pointer"
+                                            >
                                                 <LuImage className="text-xl" />
-                                            </div>
+                                            </label>
                                             <EmojiSelector
                                                 text={postBody}
                                                 setText={setPostBody}
@@ -124,12 +207,12 @@ const Home: React.FC<HomeProps> = ({}) => {
                                                 onClick={createPost}
                                                 className={`ml-auto mr-0 bg-primary-color ${
                                                     (postBody.length === 0 ||
-                                                        postLoading) &&
+                                                        submitLoading) &&
                                                     "bg-opacity-60 cursor-not-allowed"
                                                 } py-1.5 px-6 font-medium rounded-md text-white text-sm`}
                                                 disabled={
                                                     postBody.length === 0 ||
-                                                    postLoading
+                                                    submitLoading
                                                 }
                                             >
                                                 Post
