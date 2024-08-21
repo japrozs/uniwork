@@ -1,7 +1,6 @@
 import { RegularUserFragment, useFollowMutation } from "@/generated/graphql";
 import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
-import { Spinner } from "./spinner-wrapper";
 import { toast } from "sonner";
 import { useApolloClient } from "@apollo/client";
 

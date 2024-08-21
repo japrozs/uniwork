@@ -4,7 +4,7 @@ import { Search } from "@/components/ui/search";
 import { PostSnippetFragment, useGetUserQuery } from "@/generated/graphql";
 import { useIsAuth } from "@/utils/use-is-auth";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { IoIosMore, IoMdArrowBack } from "react-icons/io";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { RiGridLine, RiShare2Line } from "react-icons/ri";
@@ -22,6 +22,8 @@ import { copyToClipboard } from "@/utils";
 import { toast } from "sonner";
 import { LuLink2 } from "react-icons/lu";
 import { FollowiButton } from "@/components/custom/followi-button";
+import { SimpleButton } from "@/components/custom/simple-button";
+import { EditProfileModal } from "@/components/custom/edit-profile-modal";
 
 interface UserPageProps {}
 
@@ -35,6 +37,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
             username,
         },
     });
+    const [open, setOpen] = useState(false);
     return (
         <Wrapper>
             <div className="flex overflow-y-auto w-[80%]">
@@ -55,7 +58,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                 </div>
                             </div>
                             <img
-                                className="w-full max-h-32 object-cover"
+                                className="w-full max-h-44 object-cover"
                                 src={`${process.env.NEXT_PUBLIC_API_URL}/${data.getUser.bg}`}
                             />
                             <div className="">
@@ -66,72 +69,87 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                     />
                                     <div className="ml-auto mr-3 flex items-center">
                                         {/* TODO: show a pencil icon here for editing options options */}
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                }}
-                                                className="focus:outline-none mr-3 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer"
-                                            >
-                                                <IoIosMore className="text-xl" />
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent
-                                                onClick={async (e) => {
-                                                    e.stopPropagation();
-                                                    // TODO: UPDATE THIS URL
-                                                    const resp =
-                                                        await copyToClipboard(
-                                                            `${window.location.protocol}//${window.location.host}/app/u/${data.getUser.username}`
-                                                        );
-
-                                                    if (
-                                                        resp
-                                                            .toLowerCase()
-                                                            .startsWith(
-                                                                "failed"
-                                                            )
-                                                    ) {
-                                                        toast.error(resp);
-                                                    } else {
-                                                        toast.success(resp);
-                                                    }
-                                                }}
-                                                className="w-48 p-1 shadow-sm"
-                                            >
-                                                <DropdownMenuItem className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
-                                                    <LuLink2 className="text-lg " />
-                                                    Copy link to profile
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={async (e) => {
-                                                        e.stopPropagation();
-                                                        if (navigator.share) {
-                                                            try {
-                                                                // TODO: check this before deployment
-                                                                await navigator.share(
-                                                                    {
-                                                                        title: `${data.getUser.name} (@${data.getUser.username}) on UniWork`,
-                                                                        text: `${data.getUser.name} (@${data.getUser.username}) on UniWork`,
-                                                                        url: `${window.location.protocol}//${window.location.host}/app/u/${data.getUser.username}`,
-                                                                    }
+                                        {data.getUser.id !== meData?.me?.id ? (
+                                            <>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                        }}
+                                                        className="focus:outline-none mr-3 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer"
+                                                    >
+                                                        <IoIosMore className="text-xl" />
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent
+                                                        onClick={async (e) => {
+                                                            e.stopPropagation();
+                                                            // TODO: UPDATE THIS URL
+                                                            const resp =
+                                                                await copyToClipboard(
+                                                                    `${window.location.protocol}//${window.location.host}/app/u/${data.getUser.username}`
                                                                 );
-                                                            } catch (error) {}
-                                                        } else {
-                                                            toast.error(
-                                                                "Sharing is not supported in your browser."
-                                                            );
-                                                        }
-                                                    }}
-                                                    className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
-                                                >
-                                                    <RiShare2Line className="text-lg " />
-                                                    Share profile via...
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                        {data.getUser.id !== meData?.me?.id && (
-                                            <FollowiButton
-                                                user={data.getUser}
+
+                                                            if (
+                                                                resp
+                                                                    .toLowerCase()
+                                                                    .startsWith(
+                                                                        "failed"
+                                                                    )
+                                                            ) {
+                                                                toast.error(
+                                                                    resp
+                                                                );
+                                                            } else {
+                                                                toast.success(
+                                                                    resp
+                                                                );
+                                                            }
+                                                        }}
+                                                        className="w-48 p-1 shadow-sm"
+                                                    >
+                                                        <DropdownMenuItem className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
+                                                            <LuLink2 className="text-lg " />
+                                                            Copy link to profile
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            onClick={async (
+                                                                e
+                                                            ) => {
+                                                                e.stopPropagation();
+                                                                if (
+                                                                    navigator.share
+                                                                ) {
+                                                                    try {
+                                                                        // TODO: check this before deployment
+                                                                        await navigator.share(
+                                                                            {
+                                                                                title: `${data.getUser.name} (@${data.getUser.username}) on UniWork`,
+                                                                                text: `${data.getUser.name} (@${data.getUser.username}) on UniWork`,
+                                                                                url: `${window.location.protocol}//${window.location.host}/app/u/${data.getUser.username}`,
+                                                                            }
+                                                                        );
+                                                                    } catch (error) {}
+                                                                } else {
+                                                                    toast.error(
+                                                                        "Sharing is not supported in your browser."
+                                                                    );
+                                                                }
+                                                            }}
+                                                            className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
+                                                        >
+                                                            <RiShare2Line className="text-lg " />
+                                                            Share profile via...
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                                <FollowiButton
+                                                    user={data.getUser}
+                                                />
+                                            </>
+                                        ) : (
+                                            <SimpleButton
+                                                onClick={() => setOpen(true)}
+                                                label={"Edit profile"}
                                             />
                                         )}
                                     </div>
@@ -206,6 +224,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                             <SpinnerWrapper />
                         </div>
                     )}
+                    <EditProfileModal open={open} setOpen={setOpen} />
                 </div>
                 <div className="w-[35%] overflow-y-auto pl-2 pt-3 sticky top-0">
                     <div className="w-full">
