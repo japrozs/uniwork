@@ -215,9 +215,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                                                         ? URL.createObjectURL(
                                                               avatar
                                                           )
-                                                        : user.avatar
+                                                        : `${process.env.NEXT_PUBLIC_API_URL}/${user.avatar}` ||
+                                                          "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                                 }
-                                                className="h-20 w-20 border-2 border-gray-100 rounded-full"
+                                                className="h-20 w-20 border-2 border-gray-100 rounded-full object-cover"
                                                 alt="Avatar"
                                             />
                                             <input

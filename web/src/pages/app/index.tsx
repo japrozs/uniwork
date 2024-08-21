@@ -41,6 +41,7 @@ import Axios from "axios";
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = ({}) => {
+    const { data: meData } = useIsAuth();
     const { data, loading } = useGetPostsQuery();
     const [postBody, setPostBody] = useState("");
     const [postInputActive, setPostInputActive] = useState(false);
@@ -111,9 +112,12 @@ const Home: React.FC<HomeProps> = ({}) => {
                             <div>
                                 <div className="flex items-start space-x-3 p-3 border border-gray-100 rounded-md mb-3">
                                     <div>
-                                        <Image
-                                            src="https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
-                                            className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
+                                        <img
+                                            src={
+                                                `${process.env.NEXT_PUBLIC_API_URL}/${meData?.me?.avatar}` ||
+                                                "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                            }
+                                            className="min-w-8 ml-auto object-cover mr-0 w-8 h-8 flex items-center justify-center rounded-full"
                                             height={20}
                                             width={20}
                                             alt="avatar"

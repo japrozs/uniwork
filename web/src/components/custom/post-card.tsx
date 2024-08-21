@@ -37,12 +37,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post, minimal }) => {
             } mb-3  border-gray-100`}
         >
             <div>
-                <Image
+                <img
                     src={
                         `${process.env.NEXT_PUBLIC_API_URL}/${post.creator.avatar}` ||
                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                     }
-                    className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
+                    className="min-w-8 ml-auto mr-0 object-cover  w-8 h-8 flex items-center justify-center rounded-full"
                     height={20}
                     width={20}
                     alt="avatar"

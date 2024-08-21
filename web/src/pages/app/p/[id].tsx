@@ -87,12 +87,12 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                         <div>
                             <div className="flex items-start space-x-3 p-3">
                                 <div>
-                                    <Image
+                                    <img
                                         src={
                                             `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
                                             "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                         }
-                                        className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
+                                        className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center object-cover rounded-full"
                                         height={20}
                                         width={20}
                                         alt="avatar"
@@ -116,12 +116,12 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                             <div>
                                 <div className="flex items-start space-x-3 p-3 rounded-md">
                                     <div>
-                                        <Image
+                                        <img
                                             src={
                                                 `${process.env.NEXT_PUBLIC_API_URL}/${meData?.me?.avatar}` ||
                                                 "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                             }
-                                            className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
+                                            className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full object-cover"
                                             height={20}
                                             width={20}
                                             alt="avatar"
@@ -205,12 +205,12 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                 Relevant people
                             </p>
                             <div className="flex items-start space-x-3 py-3">
-                                <Image
+                                <img
                                     src={
                                         `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
                                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                     }
-                                    className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"
+                                    className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md  object-cover"
                                     height={20}
                                     width={20}
                                     alt="avatar"
@@ -227,9 +227,12 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                                 @{data.getPost.creator.username}
                                             </p>
                                         </a>
-                                        <FollowiButton
-                                            user={data.getPost.creator}
-                                        />
+                                        {data.getPost.creator.id !==
+                                            meData?.me?.id && (
+                                            <FollowiButton
+                                                user={data.getPost.creator}
+                                            />
+                                        )}
                                     </div>
                                     <p className="text-xs mt-2.5 font-medium text-gray-800">
                                         {data.getPost.creator.bio}

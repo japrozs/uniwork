@@ -35,7 +35,7 @@ export class User extends BaseEntity {
     bio: string;
 
     @Field()
-    @Column({ default: "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png" })
+    @Column({ default: "uploads/profile-icon.png" })
     avatar: string;
 
     @Field()

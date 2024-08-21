@@ -66,7 +66,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                 <div className="flex items-end">
                                     <img
                                         src={`${process.env.NEXT_PUBLIC_API_URL}/${data.getUser.avatar}`}
-                                        className="h-20 w-20 border-2 border-gray-100 rounded-full mt-[-40px] ml-3"
+                                        className="h-20 w-20 border-2 border-gray-100 rounded-full mt-[-40px] ml-3  object-cover"
                                     />
                                     <div className="ml-auto mr-3 flex items-center">
                                         {/* TODO: show a pencil icon here for editing options options */}
@@ -188,7 +188,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                         {data.getUser.uni.trim().length !==
                                             0 && (
                                             <div className="flex items-center">
-                                                <span className="text-xs mx-1 text-gray-500">
+                                                <span className="text-xs mr-2.5 text-gray-500">
                                                     •
                                                 </span>
                                                 <div className="flex items-center">
