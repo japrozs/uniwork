@@ -51,7 +51,12 @@ const Signup: React.FC<SignupProps> = ({}) => {
                         Create your Uniwork account
                     </p>
                     <Formik
-                        initialValues={{ name: "", email: "", password: "" }}
+                        initialValues={{
+                            username: "",
+                            name: "",
+                            email: "",
+                            password: "",
+                        }}
                         onSubmit={async (values, { setErrors }) => {
                             const res = await registerMut({
                                 variables: {

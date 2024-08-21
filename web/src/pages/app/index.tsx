@@ -1,7 +1,7 @@
 import { Button } from "@/components/custom/button";
 import { Navbar } from "@/components/custom/navbar";
 import { PostCard } from "@/components/custom/post-card";
-import { Spinner } from "@/components/custom/spinner";
+import { SpinnerWrapper } from "@/components/custom/spinner-wrapper";
 import { Wrapper } from "@/components/custom/wrapper";
 import {
     PostSnippetFragment,
@@ -104,7 +104,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                     {!data && loading ? (
                         <div className="w-full mx-auto mt-[10vh]">
                             {/* try skeleton loaders instead of spinners */}
-                            <Spinner />
+                            <SpinnerWrapper />
                         </div>
                     ) : (
                         <div className="w-full">

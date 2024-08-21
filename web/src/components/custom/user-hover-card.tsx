@@ -7,6 +7,7 @@ import {
 import Image from "next/image";
 import router from "next/router";
 import React from "react";
+import { FollowiButton } from "./followi-button";
 
 interface UserHoverCardProps {
     creator: RegularUserFragment;
@@ -28,11 +29,7 @@ export const UserHoverCard: React.FC<UserHoverCardProps> = ({ creator }) => {
                         alt="avatar"
                     />
                 </div>
-                <button
-                    className={`transition-all  ml-auto mr-0 bg-white py-1.5 px-6 font-medium rounded-md text-black border border-gray-200 hover:bg-gray-50 text-sm`}
-                >
-                    Follow
-                </button>
+                <FollowiButton user={creator} />
             </div>
             <div className="mt-3" />
             <a href={`/app/u/${creator.username}`}>

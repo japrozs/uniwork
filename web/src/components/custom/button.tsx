@@ -1,6 +1,6 @@
 import React, { LegacyRef } from "react";
 import { IconType } from "react-icons/lib";
-import { Spinner } from "./spinner";
+import { SpinnerWrapper } from "./spinner-wrapper";
 
 type ButtonProps = {
     label: string;
@@ -58,7 +58,10 @@ export const Button: React.FC<ButtonProps> = ({
         >
             {loading ? (
                 <>
-                    <Spinner className="w-5 h-5 text-gray-200 fill-primary-color" />
+                    <SpinnerWrapper
+                        tiny
+                        className="w-5 h-5 text-gray-50 fill-primary-color"
+                    />
                 </>
             ) : (
                 <>

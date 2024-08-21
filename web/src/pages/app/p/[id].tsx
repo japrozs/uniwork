@@ -1,5 +1,6 @@
 import { CommentCard } from "@/components/custom/comment-card";
-import { Spinner } from "@/components/custom/spinner";
+// import { Spinner } from "@/components/custom/spinner";
+import { Spinner } from "@primer/react";
 import { UserProfileDropdown } from "@/components/custom/user-profile-dropdown";
 import { Wrapper } from "@/components/custom/wrapper";
 import { EmojiSelector } from "@/components/ui/emoji-selector";
@@ -28,6 +29,8 @@ import { PostActionTray } from "@/components/custom/post-action-tray";
 import { useIsAuth } from "@/utils/use-is-auth";
 import Link from "next/link";
 import { ImagePreview } from "@/components/custom/image-preview";
+import { FollowiButton } from "@/components/custom/followi-button";
+import { SpinnerWrapper } from "@/components/custom/spinner-wrapper";
 
 interface PostPageProps {}
 
@@ -190,73 +193,80 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                     ) : (
                         <div className="w-full mx-auto mt-[10vh]">
                             {/* try skeleton loaders instead of spinners */}
-                            <Spinner />
+                            <SpinnerWrapper />
                         </div>
                     )}
                 </div>
                 <div className="w-[35%] overflow-y-auto pl-2 pt-3 sticky top-0">
                     <Search />
-                    <div className="py-2 px-2.5 border border-gray-100 rounded-md">
-                        <p className="text-sm font-semibold">Relevant people</p>
-                        <div className="flex items-start space-x-3 py-3">
-                            <Image
-                                src={
-                                    data?.getPost.creator.avatar ||
-                                    "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
-                                }
-                                className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"
-                                height={20}
-                                width={20}
-                                alt="avatar"
-                            />
-                            <div className="w-full">
-                                <div className="flex items-start">
-                                    <a
-                                        href={`/app/u/${data?.getPost.creator.username}`}
-                                    >
-                                        <p className="text-sm font-medium text-black hover:underline">
-                                            {data?.getPost.creator.name}
-                                        </p>
-                                        <p className="text-gray-500 menlo text-xs font-medium">
-                                            @{data?.getPost.creator.username}
-                                        </p>
-                                    </a>
-                                    <button
-                                        className={`transition-all  ml-auto mr-0 bg-white py-1.5 px-6 font-medium rounded-md text-black border border-gray-200 hover:bg-gray-50 text-sm`}
-                                    >
-                                        Follow
-                                    </button>
-                                </div>
-                                <p className="text-xs mt-2.5 font-medium text-gray-800">
-                                    {data?.getPost.creator.bio}
-                                </p>
-                                <div className="mt-3 flex items-center space-x-3">
-                                    <div className="flex items-center">
-                                        <p className="text-sm font-semibold text-black">
-                                            {
-                                                data?.getPost.creator
-                                                    .followingCount
-                                            }
-                                        </p>
-                                        <p className="ml-1 text-sm font-medium text-gray-500">
-                                            Following
-                                        </p>
+                    {data && !loading ? (
+                        <div className="py-2 px-2.5 border border-gray-100 rounded-md">
+                            <p className="text-sm font-semibold">
+                                Relevant people
+                            </p>
+                            <div className="flex items-start space-x-3 py-3">
+                                <Image
+                                    src={
+                                        data.getPost.creator.avatar ||
+                                        "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                    }
+                                    className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"
+                                    height={20}
+                                    width={20}
+                                    alt="avatar"
+                                />
+                                <div className="w-full">
+                                    <div className="flex items-start">
+                                        <a
+                                            href={`/app/u/${data.getPost.creator.username}`}
+                                        >
+                                            <p className="text-sm font-medium text-black hover:underline">
+                                                {data.getPost.creator.name}
+                                            </p>
+                                            <p className="text-gray-500 menlo text-xs font-medium">
+                                                @{data.getPost.creator.username}
+                                            </p>
+                                        </a>
+                                        <FollowiButton
+                                            user={data.getPost.creator}
+                                        />
                                     </div>
-                                    <div className="flex items-center">
-                                        <p className="text-sm font-semibold text-black">
-                                            {
-                                                data?.getPost.creator
-                                                    .followerCount
-                                            }
-                                        </p>
-                                        <p className="ml-1 text-sm font-medium text-gray-500">
-                                            Followers
-                                        </p>
+                                    <p className="text-xs mt-2.5 font-medium text-gray-800">
+                                        {data.getPost.creator.bio}
+                                    </p>
+                                    <div className="mt-3 flex items-center space-x-3">
+                                        <div className="flex items-center">
+                                            <p className="text-sm font-semibold text-black">
+                                                {
+                                                    data.getPost.creator
+                                                        .followingCount
+                                                }
+                                            </p>
+                                            <p className="ml-1 text-sm font-medium text-gray-500">
+                                                Following
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <p className="text-sm font-semibold text-black">
+                                                {
+                                                    data.getPost.creator
+                                                        .followerCount
+                                                }
+                                            </p>
+                                            <p className="ml-1 text-sm font-medium text-gray-500">
+                                                Followers
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="w-full mx-auto mt-[10vh]">
+                            {/* try skeleton loaders instead of spinners */}
+                            <SpinnerWrapper />
+                        </div>
+                    )}
                 </div>
             </div>
         </Wrapper>

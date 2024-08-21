@@ -1,4 +1,4 @@
-import { Spinner } from "@/components/custom/spinner";
+import { SpinnerWrapper } from "@/components/custom/spinner-wrapper";
 import { Wrapper } from "@/components/custom/wrapper";
 import { Search } from "@/components/ui/search";
 import { PostSnippetFragment, useGetUserQuery } from "@/generated/graphql";
@@ -21,11 +21,12 @@ import {
 import { copyToClipboard } from "@/utils";
 import { toast } from "sonner";
 import { LuLink2 } from "react-icons/lu";
+import { FollowiButton } from "@/components/custom/followi-button";
 
 interface UserPageProps {}
 
 const UserPage: React.FC<UserPageProps> = ({}) => {
-    useIsAuth();
+    const { data: meData } = useIsAuth();
     const router = useRouter();
     const username =
         typeof router.query.username == "string" ? router.query.username : "-1";
@@ -124,15 +125,15 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                                     className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
                                                 >
                                                     <RiShare2Line className="text-lg " />
-                                                    Share post via...
+                                                    Share profile via...
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
-                                        <button
-                                            className={`transition-all  ml-auto mr-0 bg-white py-1.5 px-6 font-medium rounded-md text-black border border-gray-200 hover:bg-gray-50 text-sm`}
-                                        >
-                                            Follow
-                                        </button>
+                                        {data.getUser.id !== meData?.me?.id && (
+                                            <FollowiButton
+                                                user={data.getUser}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                                 <div className="px-3">
@@ -202,7 +203,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                     ) : (
                         <div className="w-full mx-auto mt-[10vh]">
                             {/* try skeleton loaders instead of spinners */}
-                            <Spinner />
+                            <SpinnerWrapper />
                         </div>
                     )}
                 </div>
