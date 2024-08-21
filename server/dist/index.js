@@ -24,6 +24,8 @@ const comment_resolver_1 = require("./resolvers/comment-resolver");
 const like_1 = require("./entities/like");
 const create_like_loader_1 = require("./utils/create-like-loader");
 const post_upload_1 = __importDefault(require("./upload/post-upload"));
+const follow_1 = require("./entities/follow");
+const create_follow_loader_1 = require("./utils/create-follow-loader");
 const main = async () => {
     const conn = await (0, typeorm_1.createConnection)({
         type: "postgres",
@@ -31,7 +33,7 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [user_1.User, post_1.Post, comment_1.Comment, like_1.Like],
+        entities: [user_1.User, post_1.Post, comment_1.Comment, like_1.Like, follow_1.Follow],
     });
     await conn.runMigrations();
     const app = (0, express_1.default)();
@@ -69,6 +71,7 @@ const main = async () => {
             res,
             redis,
             likeLoader: (0, create_like_loader_1.createLikeLoader)(),
+            followLoader: (0, create_follow_loader_1.createFollowLoader)(),
         }),
     });
     app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "../uploads")));

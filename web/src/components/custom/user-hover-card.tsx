@@ -48,13 +48,17 @@ export const UserHoverCard: React.FC<UserHoverCardProps> = ({ creator }) => {
             </p>
             <div className="mt-3 flex items-center space-x-3">
                 <div className="flex items-center">
-                    <p className="text-sm font-semibold text-black">12</p>
+                    <p className="text-sm font-semibold text-black">
+                        {creator.followingCount}
+                    </p>
                     <p className="ml-1 text-sm font-medium text-gray-500">
                         Following
                     </p>
                 </div>
                 <div className="flex items-center">
-                    <p className="text-sm font-semibold text-black">2.3k</p>
+                    <p className="text-sm font-semibold text-black">
+                        {creator.followerCount}
+                    </p>
                     <p className="ml-1 text-sm font-medium text-gray-500">
                         Followers
                     </p>

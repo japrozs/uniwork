@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import {
     BaseEntity,
     Column,
@@ -11,6 +11,7 @@ import {
 import { Post } from "./post";
 import { Comment } from "./comment";
 import { Like } from "./like";
+import { Follow } from "./follow";
 
 @ObjectType()
 @Entity()
@@ -29,7 +30,7 @@ export class User extends BaseEntity {
 
     @Field()
     @Column({
-        default: "",
+        default: "Hi there 👋🏻",
     })
     bio: string;
 
@@ -65,6 +66,25 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Like, (like) => like.user)
     likes: Like[];
+
+    @Field(() => [Follow])
+    @OneToMany(() => Follow, (follow) => follow.follower)
+    following: Follow[]; // Users this user is following
+
+    @Field(() => [Follow])
+    @OneToMany(() => Follow, (follow) => follow.following)
+    followers: Follow[]; // Users following this user
+
+    @Field(() => Int, { nullable: true })
+    followThisUser: number | null;
+
+    @Field()
+    @Column({ default: 0 })
+    followerCount: number;
+
+    @Field()
+    @Column({ default: 0 })
+    followingCount: number;
 
     @Field(() => String)
     @CreateDateColumn()

@@ -26,6 +26,7 @@ const is_auth_1 = require("../middleware/is-auth");
 const user_input_1 = require("../schemas/user-input");
 const send_email_1 = require("../utils/send-email");
 const validate_register_1 = require("../utils/validate-register");
+const follow_1 = require("../entities/follow");
 let FieldError = class FieldError {
 };
 __decorate([
@@ -54,6 +55,20 @@ UserResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserResponse);
 let UserResolver = class UserResolver {
+    async followThisUser(user, { followLoader, req }) {
+        const currentUserId = req.session.userId;
+        if (!currentUserId) {
+            return null;
+        }
+        if (user.id === currentUserId) {
+            return null;
+        }
+        const follow = await followLoader.load({
+            followerId: currentUserId,
+            followingId: user.id,
+        });
+        return follow ? 1 : null;
+    }
     async changePassword(token, newPassword, { redis, req }) {
         if (newPassword.length <= 2) {
             return {
@@ -175,8 +190,10 @@ let UserResolver = class UserResolver {
             .createQueryBuilder("user")
             .where("user.username = :username", { username })
             .leftJoinAndSelect("user.posts", "posts")
+            .leftJoinAndSelect("user.following", "following")
+            .leftJoinAndSelect("user.followers", "followers")
             .leftJoinAndSelect("posts.creator", "postsCreator")
-            .leftJoinAndSelect("posts.comments", "postsComments")
+            .leftJoinAndSelect("posts.comments", "postsCoimments")
             .orderBy({
             "posts.createdAt": "DESC",
         })
@@ -230,7 +247,44 @@ let UserResolver = class UserResolver {
         });
         return true;
     }
+    async follow(id, { req }) {
+        const { userId } = req.session;
+        if (userId === id) {
+            console.error("You cannot follow yourself");
+            return false;
+        }
+        return await (0, typeorm_1.getManager)().transaction(async (transactionalEntityManager) => {
+            const followRepository = transactionalEntityManager.getRepository(follow_1.Follow);
+            const userRepository = transactionalEntityManager.getRepository(user_1.User);
+            const existingFollow = await followRepository.findOne({
+                where: { followerId: userId, followingId: id },
+            });
+            if (existingFollow) {
+                await followRepository.remove(existingFollow);
+                await userRepository.decrement({ id }, "followerCount", 1);
+                await userRepository.decrement({ id: userId }, "followingCount", 1);
+            }
+            else {
+                const newFollow = followRepository.create({
+                    followerId: userId,
+                    followingId: id,
+                });
+                await followRepository.save(newFollow);
+                await userRepository.increment({ id }, "followerCount", 1);
+                await userRepository.increment({ id: userId }, "followingCount", 1);
+            }
+            return true;
+        });
+    }
 };
+__decorate([
+    (0, type_graphql_1.FieldResolver)(() => type_graphql_1.Int, { nullable: true }),
+    __param(0, (0, type_graphql_1.Root)()),
+    __param(1, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_1.User, Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "followThisUser", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("token")),
@@ -297,6 +351,15 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "updateName", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.UseMiddleware)(is_auth_1.isAuth),
+    __param(0, (0, type_graphql_1.Arg)("id", () => type_graphql_1.Int)),
+    __param(1, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "follow", null);
 UserResolver = __decorate([
     (0, type_graphql_1.Resolver)(user_1.User)
 ], UserResolver);

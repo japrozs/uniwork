@@ -3,13 +3,16 @@ import {
     Arg,
     Ctx,
     Field,
+    FieldResolver,
+    Int,
     Mutation,
     ObjectType,
     Query,
     Resolver,
+    Root,
     UseMiddleware,
 } from "type-graphql";
-import { getConnection, getRepository } from "typeorm";
+import { getConnection, getManager, getRepository } from "typeorm";
 import { v4 } from "uuid";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { User } from "../entities/user";
@@ -18,6 +21,7 @@ import { UserInput } from "../schemas/user-input";
 import { Context } from "../types";
 import { sendEmail } from "../utils/send-email";
 import { validateRegister } from "../utils/validate-register";
+import { Follow } from "../entities/follow";
 
 @ObjectType()
 export class FieldError {
@@ -38,6 +42,30 @@ class UserResponse {
 
 @Resolver(User)
 export class UserResolver {
+    @FieldResolver(() => Int, { nullable: true })
+    async followThisUser(
+        @Root() user: User,
+        @Ctx() { followLoader, req }: Context
+    ) {
+        const currentUserId = req.session.userId;
+
+        if (!currentUserId) {
+            return null;
+        }
+
+        // If the current user is viewing their own profile, no need to load follow status
+        if (user.id === currentUserId) {
+            return null;
+        }
+
+        const follow = await followLoader.load({
+            followerId: currentUserId,
+            followingId: user.id,
+        });
+
+        return follow ? 1 : null;
+    }
+
     @Mutation(() => UserResponse)
     async changePassword(
         @Arg("token") token: string,
@@ -213,8 +241,10 @@ export class UserResolver {
             .createQueryBuilder("user")
             .where("user.username = :username", { username })
             .leftJoinAndSelect("user.posts", "posts")
+            .leftJoinAndSelect("user.following", "following")
+            .leftJoinAndSelect("user.followers", "followers")
             .leftJoinAndSelect("posts.creator", "postsCreator")
-            .leftJoinAndSelect("posts.comments", "postsComments")
+            .leftJoinAndSelect("posts.comments", "postsCoimments")
             .orderBy({
                 "posts.createdAt": "DESC",
             })
@@ -286,6 +316,56 @@ export class UserResolver {
             }
         );
         return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuth)
+    async follow(@Arg("id", () => Int) id: number, @Ctx() { req }: Context) {
+        const { userId } = req.session;
+
+        if (userId === id) {
+            console.error("You cannot follow yourself");
+            return false;
+        }
+
+        return await getManager().transaction(
+            async (transactionalEntityManager) => {
+                const followRepository =
+                    transactionalEntityManager.getRepository(Follow);
+                const userRepository =
+                    transactionalEntityManager.getRepository(User);
+
+                const existingFollow = await followRepository.findOne({
+                    where: { followerId: userId, followingId: id },
+                });
+
+                if (existingFollow) {
+                    // Unfollow: Remove follow and decrement follower/following counts
+                    await followRepository.remove(existingFollow);
+                    await userRepository.decrement({ id }, "followerCount", 1);
+                    await userRepository.decrement(
+                        { id: userId },
+                        "followingCount",
+                        1
+                    );
+                } else {
+                    // Follow: Add new follow and increment follower/following counts
+                    const newFollow = followRepository.create({
+                        followerId: userId,
+                        followingId: id,
+                    });
+                    await followRepository.save(newFollow);
+                    await userRepository.increment({ id }, "followerCount", 1);
+                    await userRepository.increment(
+                        { id: userId },
+                        "followingCount",
+                        1
+                    );
+                }
+
+                return true;
+            }
+        );
     }
 
     // @UseMiddleware(isAuth)

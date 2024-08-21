@@ -6,6 +6,9 @@ fragment RegularUser on User {
     bio
     avatar
     bg
+    followingCount
+    followerCount
+    followThisUser
     createdAt
     updatedAt
     __typename

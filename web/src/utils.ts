@@ -52,3 +52,10 @@ export const copyToClipboard = (text: string): Promise<string> => {
             return "Failed to copy";
         });
 };
+
+export const FORMAT_GRAMMAR = (val: number, str: string, plural?: string) => {
+    if (val != 1) {
+        return `${val} ${plural || `${str}s`}`;
+    }
+    return `${val} ${str}`;
+};

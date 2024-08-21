@@ -117,6 +117,10 @@ export const PostActionTray: React.FC<PostActionTrayProps> = ({
                                             url: `${window.location.protocol}//${window.location.host}/app/p/${post.id}`,
                                         });
                                     } catch (error) {}
+                                } else {
+                                    toast.error(
+                                        "Sharing is not supported in your browser."
+                                    );
                                 }
                             }}
                             className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"

@@ -35,11 +35,20 @@ export type FieldError = {
   message: Scalars['String']['output'];
 };
 
+export type Follow = {
+  __typename?: 'Follow';
+  follower: User;
+  followerId: Scalars['Float']['output'];
+  following: User;
+  followingId: Scalars['Float']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
   createComment: Comment;
   createPost: Post;
+  follow: Scalars['Boolean']['output'];
   forgotPassword: Scalars['Boolean']['output'];
   like: Scalars['Boolean']['output'];
   login: UserResponse;
@@ -63,6 +72,11 @@ export type MutationCreateCommentArgs = {
 
 export type MutationCreatePostArgs = {
   body: Scalars['String']['input'];
+};
+
+
+export type MutationFollowArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -137,6 +151,11 @@ export type User = {
   comments: Array<Comment>;
   createdAt: Scalars['String']['output'];
   email: Scalars['String']['output'];
+  followThisUser?: Maybe<Scalars['Int']['output']>;
+  followerCount: Scalars['Float']['output'];
+  followers: Array<Follow>;
+  following: Array<Follow>;
+  followingCount: Scalars['Float']['output'];
   id: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   posts: Array<Post>;
@@ -157,15 +176,15 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
-export type PostSnippetFragment = { __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } }> };
+export type PostSnippetFragment = { __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } }> };
 
-export type RegularCommentFragment = { __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } };
+export type RegularCommentFragment = { __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } | null };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } | null };
 
-export type RegularUserFragment = { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string };
+export type RegularUserFragment = { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string };
 
 export type CreateCommentMutationVariables = Exact<{
   postId: Scalars['String']['input'];
@@ -195,7 +214,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -207,31 +226,31 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } | null } };
 
 export type GetPostQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', getPost: { __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } }> } };
+export type GetPostQuery = { __typename?: 'Query', getPost: { __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } }> } };
 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } }> }> };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } }> }> };
 
 export type GetUserQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string, posts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string }> }> } };
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string, posts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string }> }>, followers: Array<{ __typename?: 'Follow', followerId: number, followingId: number }>, following: Array<{ __typename?: 'Follow', followerId: number, followingId: number }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, createdAt: string, updatedAt: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, createdAt: string, updatedAt: string } | null };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -242,6 +261,9 @@ export const RegularUserFragmentDoc = gql`
   bio
   avatar
   bg
+  followingCount
+  followerCount
+  followThisUser
   createdAt
   updatedAt
   __typename
@@ -617,6 +639,17 @@ export const GetUserDocument = gql`
       createdAt
       updatedAt
       __typename
+    }
+    followingCount
+    followerCount
+    followThisUser
+    followers {
+      followerId
+      followingId
+    }
+    following {
+      followerId
+      followingId
     }
     createdAt
     updatedAt

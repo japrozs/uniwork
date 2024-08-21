@@ -20,6 +20,8 @@ import { CommentResolver } from "./resolvers/comment-resolver";
 import { Like } from "./entities/like";
 import { createLikeLoader } from "./utils/create-like-loader";
 import postUpload from "./upload/post-upload";
+import { Follow } from "./entities/follow";
+import { createFollowLoader } from "./utils/create-follow-loader";
 
 const main = async () => {
     const conn = await createConnection({
@@ -28,7 +30,7 @@ const main = async () => {
         logging: true,
         synchronize: true,
         migrations: [path.join(__dirname, "./migrations/*")],
-        entities: [User, Post, Comment, Like],
+        entities: [User, Post, Comment, Like, Follow],
     });
     await conn.runMigrations();
 
@@ -97,6 +99,7 @@ const main = async () => {
             res,
             redis,
             likeLoader: createLikeLoader(),
+            followLoader: createFollowLoader(),
         }),
     });
 

@@ -233,7 +233,10 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                 <div className="mt-3 flex items-center space-x-3">
                                     <div className="flex items-center">
                                         <p className="text-sm font-semibold text-black">
-                                            12
+                                            {
+                                                data?.getPost.creator
+                                                    .followingCount
+                                            }
                                         </p>
                                         <p className="ml-1 text-sm font-medium text-gray-500">
                                             Following
@@ -241,7 +244,10 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                     </div>
                                     <div className="flex items-center">
                                         <p className="text-sm font-semibold text-black">
-                                            2.3k
+                                            {
+                                                data?.getPost.creator
+                                                    .followerCount
+                                            }
                                         </p>
                                         <p className="ml-1 text-sm font-medium text-gray-500">
                                             Followers

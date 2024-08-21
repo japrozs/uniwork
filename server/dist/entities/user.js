@@ -15,6 +15,7 @@ const typeorm_1 = require("typeorm");
 const post_1 = require("./post");
 const comment_1 = require("./comment");
 const like_1 = require("./like");
+const follow_1 = require("./follow");
 let User = class User extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -35,7 +36,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({
-        default: "",
+        default: "Hi there 👋🏻",
     }),
     __metadata("design:type", String)
 ], User.prototype, "bio", void 0);
@@ -72,6 +73,30 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => like_1.Like, (like) => like.user),
     __metadata("design:type", Array)
 ], User.prototype, "likes", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [follow_1.Follow]),
+    (0, typeorm_1.OneToMany)(() => follow_1.Follow, (follow) => follow.follower),
+    __metadata("design:type", Array)
+], User.prototype, "following", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [follow_1.Follow]),
+    (0, typeorm_1.OneToMany)(() => follow_1.Follow, (follow) => follow.following),
+    __metadata("design:type", Array)
+], User.prototype, "followers", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.Int, { nullable: true }),
+    __metadata("design:type", Object)
+], User.prototype, "followThisUser", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], User.prototype, "followerCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], User.prototype, "followingCount", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.CreateDateColumn)(),

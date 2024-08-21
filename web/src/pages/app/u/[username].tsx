@@ -5,11 +5,22 @@ import { PostSnippetFragment, useGetUserQuery } from "@/generated/graphql";
 import { useIsAuth } from "@/utils/use-is-auth";
 import { useRouter } from "next/router";
 import React from "react";
-import { IoMdArrowBack } from "react-icons/io";
+import { IoIosMore, IoMdArrowBack } from "react-icons/io";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { RiGridLine } from "react-icons/ri";
+import { RiGridLine, RiShare2Line } from "react-icons/ri";
 import { HiOutlineReply, HiViewGrid } from "react-icons/hi";
 import { PostCard } from "@/components/custom/post-card";
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { copyToClipboard } from "@/utils";
+import { toast } from "sonner";
+import { LuLink2 } from "react-icons/lu";
 
 interface UserPageProps {}
 
@@ -36,9 +47,11 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                 >
                                     <IoMdArrowBack className="text-xl" />
                                 </div>
-                                <p className="text-md font-semibold ml-3.5">
-                                    {data.getUser.name}{" "}
-                                </p>
+                                <div>
+                                    <p className="text-md font-semibold ml-3.5">
+                                        {data.getUser.name}{" "}
+                                    </p>
+                                </div>
                             </div>
                             <img
                                 className="w-full max-h-32 object-cover"
@@ -50,7 +63,71 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                         src={data.getUser.avatar}
                                         className="h-20 w-20 border-2 border-gray-100 rounded-full mt-[-40px] ml-3"
                                     />
-                                    <div className="ml-auto mr-3">
+                                    <div className="ml-auto mr-3 flex items-center">
+                                        {/* TODO: show a pencil icon here for editing options options */}
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                }}
+                                                className="focus:outline-none mr-3 flex items-center hover:bg-gray-100 text-gray-600 hover:text-black p-1 rounded-full cursor-pointer"
+                                            >
+                                                <IoIosMore className="text-xl" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                onClick={async (e) => {
+                                                    e.stopPropagation();
+                                                    // TODO: UPDATE THIS URL
+                                                    const resp =
+                                                        await copyToClipboard(
+                                                            `${window.location.protocol}//${window.location.host}/app/u/${data.getUser.username}`
+                                                        );
+
+                                                    if (
+                                                        resp
+                                                            .toLowerCase()
+                                                            .startsWith(
+                                                                "failed"
+                                                            )
+                                                    ) {
+                                                        toast.error(resp);
+                                                    } else {
+                                                        toast.success(resp);
+                                                    }
+                                                }}
+                                                className="w-48 p-1 shadow-sm"
+                                            >
+                                                <DropdownMenuItem className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
+                                                    <LuLink2 className="text-lg " />
+                                                    Copy link to profile
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={async (e) => {
+                                                        e.stopPropagation();
+                                                        if (navigator.share) {
+                                                            try {
+                                                                // TODO: check this before deployment
+                                                                await navigator.share(
+                                                                    {
+                                                                        title: `${data.getUser.name} (@${data.getUser.username}) on UniWork`,
+                                                                        text: `${data.getUser.name} (@${data.getUser.username}) on UniWork`,
+                                                                        url: `${window.location.protocol}//${window.location.host}/app/u/${data.getUser.username}`,
+                                                                    }
+                                                                );
+                                                            } catch (error) {}
+                                                        } else {
+                                                            toast.error(
+                                                                "Sharing is not supported in your browser."
+                                                            );
+                                                        }
+                                                    }}
+                                                    className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
+                                                >
+                                                    <RiShare2Line className="text-lg " />
+                                                    Share post via...
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                         <button
                                             className={`transition-all  ml-auto mr-0 bg-white py-1.5 px-6 font-medium rounded-md text-black border border-gray-200 hover:bg-gray-50 text-sm`}
                                         >
@@ -74,7 +151,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                     <div className="mt-3 flex items-center space-x-3">
                                         <div className="flex items-center">
                                             <p className="text-sm font-semibold text-black">
-                                                12
+                                                {data.getUser.followingCount}
                                             </p>
                                             <p className="ml-1 text-sm font-medium text-gray-500">
                                                 Following
@@ -82,7 +159,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                         </div>
                                         <div className="flex items-center">
                                             <p className="text-sm font-semibold text-black">
-                                                2.3k
+                                                {data.getUser.followerCount}
                                             </p>
                                             <p className="ml-1 text-sm font-medium text-gray-500">
                                                 Followers

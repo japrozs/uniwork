@@ -31,6 +31,17 @@ query getUser($username: String!) {
             updatedAt
             __typename
         }
+        followingCount
+        followerCount
+        followThisUser
+        followers {
+            followerId
+            followingId
+        }
+        following {
+            followerId
+            followingId
+        }
         createdAt
         updatedAt
         __typename
