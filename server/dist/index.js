@@ -24,6 +24,7 @@ const comment_resolver_1 = require("./resolvers/comment-resolver");
 const like_1 = require("./entities/like");
 const create_like_loader_1 = require("./utils/create-like-loader");
 const post_upload_1 = __importDefault(require("./upload/post-upload"));
+const profile_upload_1 = __importDefault(require("./upload/profile-upload"));
 const follow_1 = require("./entities/follow");
 const create_follow_loader_1 = require("./utils/create-follow-loader");
 const main = async () => {
@@ -76,6 +77,7 @@ const main = async () => {
     });
     app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "../uploads")));
     app.use("/upload/", post_upload_1.default);
+    app.use("/upload/", profile_upload_1.default);
     apolloServer.applyMiddleware({
         app,
         cors: false,

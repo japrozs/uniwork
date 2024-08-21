@@ -39,7 +39,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, minimal }) => {
             <div>
                 <Image
                     src={
-                        post.creator.avatar ||
+                        `${process.env.NEXT_PUBLIC_API_URL}/${post.creator.avatar}` ||
                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                     }
                     className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"

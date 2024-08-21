@@ -65,7 +65,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                             <div className="">
                                 <div className="flex items-end">
                                     <img
-                                        src={data.getUser.avatar}
+                                        src={`${process.env.NEXT_PUBLIC_API_URL}/${data.getUser.avatar}`}
                                         className="h-20 w-20 border-2 border-gray-100 rounded-full mt-[-40px] ml-3"
                                     />
                                     <div className="ml-auto mr-3 flex items-center">

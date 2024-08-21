@@ -89,7 +89,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                 <div>
                                     <Image
                                         src={
-                                            data.getPost.creator.avatar ||
+                                            `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
                                             "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                         }
                                         className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
@@ -118,7 +118,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                     <div>
                                         <Image
                                             src={
-                                                meData?.me?.avatar ||
+                                                `${process.env.NEXT_PUBLIC_API_URL}/${meData?.me?.avatar}` ||
                                                 "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                             }
                                             className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"
@@ -207,7 +207,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                             <div className="flex items-start space-x-3 py-3">
                                 <Image
                                     src={
-                                        data.getPost.creator.avatar ||
+                                        `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
                                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                     }
                                     className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"

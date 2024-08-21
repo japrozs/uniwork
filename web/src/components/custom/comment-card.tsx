@@ -20,7 +20,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
             <div>
                 <Image
                     src={
-                        comment.creator.avatar ||
+                        `${process.env.NEXT_PUBLIC_API_URL}/${comment.creator.avatar}` ||
                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                     }
                     className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center rounded-full"

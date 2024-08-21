@@ -33,7 +33,7 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
             <DropdownMenuTrigger className="hover:bg-gray-100 rounded-sm p-1 flex items-center w-full focus:outline-none ml-auto mr-0">
                 <Image
                     src={
-                        data?.me?.avatar ||
+                        `${process.env.NEXT_PUBLIC_API_URL}/${data?.me?.avatar}` ||
                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                     }
                     className="h-7 w-7 rounded-full"
@@ -63,7 +63,7 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
                                     </p> */}
                         <Image
                             src={
-                                data?.me?.avatar ||
+                                `${process.env.NEXT_PUBLIC_API_URL}/${data?.me?.avatar}` ||
                                 "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                             }
                             className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md"
