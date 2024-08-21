@@ -42,6 +42,7 @@ query getUser($username: String!) {
             followerId
             followingId
         }
+        uni
         createdAt
         updatedAt
         __typename

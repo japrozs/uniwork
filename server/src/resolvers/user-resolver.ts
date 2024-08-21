@@ -308,11 +308,18 @@ export class UserResolver {
 
     @UseMiddleware(isAuth)
     @Mutation(() => Boolean)
-    async updateName(@Arg("name") name: string, @Ctx() { req }: Context) {
+    async updateProfile(
+        @Arg("name") name: string,
+        @Arg("bio") bio: string,
+        @Arg("uni") uni: string,
+        @Ctx() { req }: Context
+    ) {
         await User.update(
             { id: req.session.userId },
             {
                 name,
+                bio,
+                uni,
             }
         );
         return true;

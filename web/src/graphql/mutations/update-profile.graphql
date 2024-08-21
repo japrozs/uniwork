@@ -1,0 +1,3 @@
+mutation updateProfile($name: String!, $bio: String!, $uni: String!) {
+    updateProfile(name: $name, bio: $bio, uni: $uni)
+}

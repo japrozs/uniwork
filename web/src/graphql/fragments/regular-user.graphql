@@ -9,6 +9,7 @@ fragment RegularUser on User {
     followingCount
     followerCount
     followThisUser
+    uni
     createdAt
     updatedAt
     __typename

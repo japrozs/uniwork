@@ -20,10 +20,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { copyToClipboard } from "@/utils";
 import { toast } from "sonner";
-import { LuLink2 } from "react-icons/lu";
+import { LuLink2, LuSchool } from "react-icons/lu";
 import { FollowiButton } from "@/components/custom/followi-button";
 import { SimpleButton } from "@/components/custom/simple-button";
 import { EditProfileModal } from "@/components/custom/edit-profile-modal";
+import { AMERICA_COLLEGES_LIST } from "@/data";
 
 interface UserPageProps {}
 
@@ -184,6 +185,27 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                                 Followers
                                             </p>
                                         </div>
+                                        {data.getUser.uni.trim().length !==
+                                            0 && (
+                                            <div className="flex items-center">
+                                                <span className="text-xs mx-1 text-gray-500">
+                                                    •
+                                                </span>
+                                                <div className="flex items-center">
+                                                    <LuSchool className="text-gray-500 text-lg mr-2" />
+                                                    <p className="text-gray-800 text-sm font-medium">
+                                                        {
+                                                            AMERICA_COLLEGES_LIST.find(
+                                                                ({ value }) =>
+                                                                    value ===
+                                                                    data.getUser
+                                                                        .uni
+                                                            )?.label
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="w-full mt-3">
@@ -217,6 +239,11 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                     </TabGroup>
                                 </div>
                             </div>
+                            <EditProfileModal
+                                open={open}
+                                setOpen={setOpen}
+                                user={data.getUser}
+                            />
                         </div>
                     ) : (
                         <div className="w-full mx-auto mt-[10vh]">
@@ -224,7 +251,6 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                             <SpinnerWrapper />
                         </div>
                     )}
-                    <EditProfileModal open={open} setOpen={setOpen} />
                 </div>
                 <div className="w-[35%] overflow-y-auto pl-2 pt-3 sticky top-0">
                     <div className="w-full">

@@ -241,9 +241,11 @@ let UserResolver = class UserResolver {
             resolve(true);
         }));
     }
-    async updateName(name, { req }) {
+    async updateProfile(name, bio, uni, { req }) {
         await user_1.User.update({ id: req.session.userId }, {
             name,
+            bio,
+            uni,
         });
         return true;
     }
@@ -346,11 +348,13 @@ __decorate([
     (0, type_graphql_1.UseMiddleware)(is_auth_1.isAuth),
     (0, type_graphql_1.Mutation)(() => Boolean),
     __param(0, (0, type_graphql_1.Arg)("name")),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    __param(1, (0, type_graphql_1.Arg)("bio")),
+    __param(2, (0, type_graphql_1.Arg)("uni")),
+    __param(3, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, String, String, Object]),
     __metadata("design:returntype", Promise)
-], UserResolver.prototype, "updateName", null);
+], UserResolver.prototype, "updateProfile", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
     (0, type_graphql_1.UseMiddleware)(is_auth_1.isAuth),
