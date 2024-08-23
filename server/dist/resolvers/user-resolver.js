@@ -27,6 +27,7 @@ const user_input_1 = require("../schemas/user-input");
 const send_email_1 = require("../utils/send-email");
 const validate_register_1 = require("../utils/validate-register");
 const follow_1 = require("../entities/follow");
+const comment_1 = require("../entities/comment");
 let FieldError = class FieldError {
 };
 __decorate([
@@ -278,6 +279,14 @@ let UserResolver = class UserResolver {
             return true;
         });
     }
+    async getUserComments({ req }) {
+        return comment_1.Comment.find({
+            where: {
+                creatorId: req.session.userId,
+            },
+            relations: ["creator", "post"],
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.FieldResolver)(() => type_graphql_1.Int, { nullable: true }),
@@ -364,6 +373,13 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "follow", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [comment_1.Comment]),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "getUserComments", null);
 UserResolver = __decorate([
     (0, type_graphql_1.Resolver)(user_1.User)
 ], UserResolver);

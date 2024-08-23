@@ -1,7 +1,12 @@
 import { SpinnerWrapper } from "@/components/custom/spinner-wrapper";
 import { Wrapper } from "@/components/custom/wrapper";
 import { Search } from "@/components/ui/search";
-import { PostSnippetFragment, useGetUserQuery } from "@/generated/graphql";
+import {
+    PostSnippetFragment,
+    RegularCommentFragment,
+    useGetUserCommentsQuery,
+    useGetUserQuery,
+} from "@/generated/graphql";
 import { useIsAuth } from "@/utils/use-is-auth";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -25,6 +30,8 @@ import { FollowiButton } from "@/components/custom/followi-button";
 import { SimpleButton } from "@/components/custom/simple-button";
 import { EditProfileModal } from "@/components/custom/edit-profile-modal";
 import { AMERICA_COLLEGES_LIST } from "@/data";
+import { CommentCard } from "@/components/custom/comment-card";
+import Link from "next/link";
 
 interface UserPageProps {}
 
@@ -40,6 +47,9 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
     });
     const [open, setOpen] = useState(false);
     console.log(data?.getUser.following);
+
+    const { data: commentsData, loading: commentsLoading } =
+        useGetUserCommentsQuery();
     return (
         <Wrapper>
             <div className="flex overflow-y-auto w-[80%]">
@@ -249,7 +259,32 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                                 )}
                                             </TabPanel>
                                             <TabPanel>
-                                                <p>replies panel</p>
+                                                {commentsData && !loading ? (
+                                                    <div>
+                                                        {commentsData.getUserComments.map(
+                                                            (
+                                                                c: RegularCommentFragment,
+                                                                i: number
+                                                            ) => (
+                                                                <Link
+                                                                    key={i}
+                                                                    href={`/app/p/${c.postId}`}
+                                                                >
+                                                                    <CommentCard
+                                                                        comment={
+                                                                            c
+                                                                        }
+                                                                    />
+                                                                </Link>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-full mx-auto mt-[10vh]">
+                                                        {/* try skeleton loaders instead of spinners */}
+                                                        <SpinnerWrapper />
+                                                    </div>
+                                                )}
                                             </TabPanel>
                                         </TabPanels>
                                     </TabGroup>

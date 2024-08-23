@@ -22,6 +22,7 @@ import { Context } from "../types";
 import { sendEmail } from "../utils/send-email";
 import { validateRegister } from "../utils/validate-register";
 import { Follow } from "../entities/follow";
+import { Comment } from "../entities/comment";
 
 @ObjectType()
 export class FieldError {
@@ -373,6 +374,21 @@ export class UserResolver {
                 return true;
             }
         );
+    }
+
+    @Query(() => [Comment])
+    async getUserComments(@Ctx() { req }: Context) {
+        // return Comment.find({
+        //     creatorId: req.session.userId
+        // }, {
+        //     relations: ["creator", "post"],
+        // });
+        return Comment.find({
+            where: {
+                creatorId: req.session.userId,
+            },
+            relations: ["creator", "post"],
+        });
     }
 
     // @UseMiddleware(isAuth)

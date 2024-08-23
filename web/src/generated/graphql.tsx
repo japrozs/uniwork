@@ -133,6 +133,7 @@ export type Query = {
   getPost: Post;
   getPosts: Array<Post>;
   getUser: User;
+  getUserComments: Array<Comment>;
   me?: Maybe<User>;
 };
 
@@ -271,6 +272,11 @@ export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } }> }> };
+
+export type GetUserCommentsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserCommentsQuery = { __typename?: 'Query', getUserComments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } }> };
 
 export type GetUserQueryVariables = Exact<{
   username: Scalars['String']['input'];
@@ -735,6 +741,45 @@ export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
 export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
 export type GetPostsSuspenseQueryHookResult = ReturnType<typeof useGetPostsSuspenseQuery>;
 export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const GetUserCommentsDocument = gql`
+    query getUserComments {
+  getUserComments {
+    ...RegularComment
+  }
+}
+    ${RegularCommentFragmentDoc}`;
+
+/**
+ * __useGetUserCommentsQuery__
+ *
+ * To run a query within a React component, call `useGetUserCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCommentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserCommentsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserCommentsQuery, GetUserCommentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserCommentsQuery, GetUserCommentsQueryVariables>(GetUserCommentsDocument, options);
+      }
+export function useGetUserCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserCommentsQuery, GetUserCommentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserCommentsQuery, GetUserCommentsQueryVariables>(GetUserCommentsDocument, options);
+        }
+export function useGetUserCommentsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserCommentsQuery, GetUserCommentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserCommentsQuery, GetUserCommentsQueryVariables>(GetUserCommentsDocument, options);
+        }
+export type GetUserCommentsQueryHookResult = ReturnType<typeof useGetUserCommentsQuery>;
+export type GetUserCommentsLazyQueryHookResult = ReturnType<typeof useGetUserCommentsLazyQuery>;
+export type GetUserCommentsSuspenseQueryHookResult = ReturnType<typeof useGetUserCommentsSuspenseQuery>;
+export type GetUserCommentsQueryResult = Apollo.QueryResult<GetUserCommentsQuery, GetUserCommentsQueryVariables>;
 export const GetUserDocument = gql`
     query getUser($username: String!) {
   getUser(username: $username) {
