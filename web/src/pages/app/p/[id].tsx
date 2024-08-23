@@ -84,15 +84,22 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                         <p className="text-md font-semibold ml-3.5">Post</p>
                     </div>
                     {data && !loading ? (
-                        <div>
-                            <div className="flex items-start space-x-3 p-3">
-                                <div>
+                        <div className="w-full">
+                            <div className="flex items-start space-x-3 p-3 w-full">
+                                <div
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        router.push(
+                                            `/app/u/${data.getPost.creator.username}`
+                                        );
+                                    }}
+                                >
                                     <img
                                         src={
                                             `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
                                             "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                                         }
-                                        className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center justify-center object-cover rounded-full"
+                                        className="min-w-8 ml-auto mr-0 w-8 h-8 flex items-center cursor-pointer justify-center object-cover rounded-full"
                                         height={20}
                                         width={20}
                                         alt="avatar"
@@ -200,70 +207,76 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                 <div className="w-[35%] overflow-y-auto pl-2 pt-3 sticky top-0">
                     <Search />
                     {data && !loading ? (
-                        <div className="py-2 px-2.5 border border-gray-100 rounded-md">
-                            <p className="text-sm font-semibold">
-                                Relevant people
-                            </p>
-                            <div className="flex items-start space-x-3 py-3">
-                                <img
-                                    src={
-                                        `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
-                                        "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
-                                    }
-                                    className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md  object-cover"
-                                    height={20}
-                                    width={20}
-                                    alt="avatar"
-                                />
-                                <div className="w-full">
-                                    <div className="flex items-start">
-                                        <a
-                                            href={`/app/u/${data.getPost.creator.username}`}
-                                        >
-                                            <p className="text-sm font-medium text-black hover:underline">
-                                                {data.getPost.creator.name}
-                                            </p>
-                                            <p className="text-gray-500 menlo text-xs font-medium">
-                                                @{data.getPost.creator.username}
-                                            </p>
-                                        </a>
-                                        {data.getPost.creator.id !==
-                                            meData?.me?.id && (
-                                            <FollowiButton
-                                                user={data.getPost.creator}
-                                            />
-                                        )}
-                                    </div>
-                                    <p className="text-xs mt-2.5 font-medium text-gray-800">
-                                        {data.getPost.creator.bio}
-                                    </p>
-                                    <div className="mt-3 flex items-center space-x-3">
-                                        <div className="flex items-center">
-                                            <p className="text-sm font-semibold text-black">
-                                                {
-                                                    data.getPost.creator
-                                                        .followingCount
-                                                }
-                                            </p>
-                                            <p className="ml-1 text-sm font-medium text-gray-500">
-                                                Following
-                                            </p>
+                        <>
+                            <div className="py-2 px-2.5 border border-gray-100 rounded-md">
+                                <p className="text-sm font-semibold">
+                                    Relevant people
+                                </p>
+                                <div className="flex items-start space-x-3 pt-3">
+                                    <img
+                                        src={
+                                            `${process.env.NEXT_PUBLIC_API_URL}/${data.getPost.creator.avatar}` ||
+                                            "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                        }
+                                        className="min-w-7 ml-auto mr-0 w-7 h-7 flex items-center justify-center rounded-md  object-cover"
+                                        height={20}
+                                        width={20}
+                                        alt="avatar"
+                                    />
+                                    <div className="w-full">
+                                        <div className="flex items-start">
+                                            <a
+                                                href={`/app/u/${data.getPost.creator.username}`}
+                                            >
+                                                <p className="text-sm font-medium text-black hover:underline">
+                                                    {data.getPost.creator.name}
+                                                </p>
+                                                <p className="text-gray-500 menlo text-xs font-medium">
+                                                    @
+                                                    {
+                                                        data.getPost.creator
+                                                            .username
+                                                    }
+                                                </p>
+                                            </a>
+                                            {data.getPost.creator.id !==
+                                                meData?.me?.id && (
+                                                <FollowiButton
+                                                    user={data.getPost.creator}
+                                                />
+                                            )}
                                         </div>
-                                        <div className="flex items-center">
-                                            <p className="text-sm font-semibold text-black">
-                                                {
-                                                    data.getPost.creator
-                                                        .followerCount
-                                                }
-                                            </p>
-                                            <p className="ml-1 text-sm font-medium text-gray-500">
-                                                Followers
-                                            </p>
+                                        <p className="text-xs mt-2.5 font-medium text-gray-800">
+                                            {data.getPost.creator.bio}
+                                        </p>
+                                        <div className="mt-1.5 mb-0.5 flex items-center space-x-3">
+                                            <div className="flex items-center">
+                                                <p className="text-sm font-semibold text-black">
+                                                    {
+                                                        data.getPost.creator
+                                                            .followingCount
+                                                    }
+                                                </p>
+                                                <p className="ml-1 text-sm font-medium text-gray-500">
+                                                    Following
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center">
+                                                <p className="text-sm font-semibold text-black">
+                                                    {
+                                                        data.getPost.creator
+                                                            .followerCount
+                                                    }
+                                                </p>
+                                                <p className="ml-1 text-sm font-medium text-gray-500">
+                                                    Followers
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </>
                     ) : (
                         <div className="w-full mx-auto mt-[10vh]">
                             {/* try skeleton loaders instead of spinners */}

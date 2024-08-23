@@ -39,6 +39,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
         },
     });
     const [open, setOpen] = useState(false);
+    console.log(data?.getUser.following);
     return (
         <Wrapper>
             <div className="flex overflow-y-auto w-[80%]">
@@ -159,11 +160,26 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                     <p className="mt-2.5 text-md font-semibold">
                                         {data.getUser.name}
                                         <span className="ml-1.5 text-xs font-medium border border-blue-100 text-blue-500 py-0.1 px-2 rounded-md bg-blue-50">
-                                            {data.getUser.id}
+                                            #{data.getUser.id}
                                         </span>
                                     </p>
                                     <p className="text-sm text-gray-500 menlo">
-                                        @{data.getUser.username}
+                                        @{data.getUser.username}{" "}
+                                        {meData?.me?.id !== data.getUser.id &&
+                                            data.getUser.following.find(
+                                                (f) =>
+                                                    f.followingId ===
+                                                    meData?.me?.id
+                                            ) && (
+                                                <span
+                                                    style={{
+                                                        fontFamily: "Inter",
+                                                    }}
+                                                    className="text-xs font-medium py-0.5 px-1 rounded-md bg-gray-200"
+                                                >
+                                                    Follows you
+                                                </span>
+                                            )}
                                     </p>
                                     <p className="mt-2 text-sm font-medium text-gray-800">
                                         {data.getUser.bio}

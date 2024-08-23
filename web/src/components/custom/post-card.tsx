@@ -18,6 +18,7 @@ import { formatPostTime, shortenText, shouldShortenText } from "@/utils";
 import { PostDisplayActionTray } from "./post-display-action-tray";
 import { PostActionTray } from "./post-action-tray";
 import { ImagePreview } from "./image-preview";
+import Link from "next/link";
 
 type UserPosts = GetUserQuery["getUser"]["posts"];
 type PostType = UserPosts[number];
@@ -36,13 +37,18 @@ export const PostCard: React.FC<PostCardProps> = ({ post, minimal }) => {
                 minimal ? "border-b" : "rounded-md border"
             } mb-3  border-gray-100`}
         >
-            <div>
+            <div
+                onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/app/u/${post.creator.username}`);
+                }}
+            >
                 <img
                     src={
                         `${process.env.NEXT_PUBLIC_API_URL}/${post.creator.avatar}` ||
                         "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
                     }
-                    className="min-w-8 ml-auto mr-0 object-cover  w-8 h-8 flex items-center justify-center rounded-full"
+                    className="min-w-8 ml-auto mr-0 object-cover w-8 h-8 flex items-center justify-center rounded-full"
                     height={20}
                     width={20}
                     alt="avatar"

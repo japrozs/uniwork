@@ -1,4 +1,8 @@
-import { PostSnippetFragment, RegularUserFragment } from "@/generated/graphql";
+import {
+    PostSnippetFragment,
+    RegularUserFragment,
+    useMeQuery,
+} from "@/generated/graphql";
 import {
     HoverCard,
     HoverCardTrigger,
@@ -14,6 +18,7 @@ interface UserHoverCardProps {
 }
 
 export const UserHoverCard: React.FC<UserHoverCardProps> = ({ creator }) => {
+    const { data: meData, loading } = useMeQuery();
     return (
         <div className="p-3" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center">

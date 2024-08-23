@@ -1,6 +1,11 @@
-import { GetUserQuery, PostSnippetFragment } from "@/generated/graphql";
+import {
+    GetUserQuery,
+    PostSnippetFragment,
+    useFollowMutation,
+    useMeQuery,
+} from "@/generated/graphql";
 import { formatPostTime } from "@/utils";
-import React from "react";
+import React, { useState } from "react";
 import { IoIosMore } from "react-icons/io";
 import {
     HoverCard,
@@ -19,8 +24,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LuFlag } from "react-icons/lu";
 import { toast } from "sonner";
-import { IoPersonAdd } from "react-icons/io5";
+import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import Link from "next/link";
+import { HiOutlineTrash } from "react-icons/hi";
+import { DeletePostModal } from "./delete-post-modal";
+import { useApolloClient } from "@apollo/client";
+import { TbPencil } from "react-icons/tb";
+import { EditPostModal } from "./edit-post-modal";
 
 type UserPosts = GetUserQuery["getUser"]["posts"];
 type PostType = UserPosts[number];
@@ -32,7 +42,23 @@ interface PostDisplayActionTrayProps {
 export const PostDisplayActionTray: React.FC<PostDisplayActionTrayProps> = ({
     post,
 }) => {
-    const router = useRouter();
+    const { data, loading } = useMeQuery();
+    const [open, setOpen] = useState(false);
+    const [postOpen, setPostOpen] = useState(false);
+    const [followMutation] = useFollowMutation();
+    const client = useApolloClient();
+
+    const follow = async () => {
+        const resp = await followMutation({
+            variables: {
+                id: post.creator.id,
+            },
+        });
+        await client.resetStore();
+        if (!resp) {
+            toast.error("An error occured.");
+        }
+    };
     return (
         <div className="flex items-start">
             <div>
@@ -80,22 +106,30 @@ export const PostDisplayActionTray: React.FC<PostDisplayActionTrayProps> = ({
                     <DropdownMenuContent
                         onClick={async (e) => {
                             e.stopPropagation();
-                            alert("hi there");
                         }}
                         className="w-56 p-1 shadow-sm"
                     >
-                        <DropdownMenuItem
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                // TODO: implement this
-                            }}
-                            className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
-                        >
-                            <IoPersonAdd className="text-lg " />
-                            <p className="whitespace-nowrap overflow-hidden text-ellipsis">
-                                Follow @{post.creator.username}
-                            </p>
-                        </DropdownMenuItem>
+                        {!loading && post.creator.id !== data?.me?.id && (
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    follow();
+                                }}
+                                className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
+                            >
+                                {post.creator.followThisUser ? (
+                                    <IoPersonRemove className="text-lg " />
+                                ) : (
+                                    <IoPersonAdd className="text-lg " />
+                                )}
+                                <p className="whitespace-nowrap overflow-hidden text-ellipsis">
+                                    {post.creator.followThisUser
+                                        ? "Unfollow"
+                                        : "Follow"}{" "}
+                                    @{post.creator.username}
+                                </p>
+                            </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -106,9 +140,30 @@ export const PostDisplayActionTray: React.FC<PostDisplayActionTrayProps> = ({
                             <LuFlag className="text-lg " />
                             Report post
                         </DropdownMenuItem>
+                        {!loading && post.creator.id === data?.me?.id && (
+                            <>
+                                <DropdownMenuItem
+                                    onClick={() => setPostOpen(true)}
+                                    className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600"
+                                >
+                                    <TbPencil className="text-lg " />
+                                    Edit post
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => setOpen(true)}
+                                    className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:bg-red-400/15 text-red-500"
+                                >
+                                    <HiOutlineTrash className="text-xl " />
+                                    Delete
+                                </DropdownMenuItem>
+                            </>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
+            <DeletePostModal open={open} setOpen={setOpen} post={post} />
+            <EditPostModal open={postOpen} setOpen={setPostOpen} post={post} />
         </div>
     );
 };

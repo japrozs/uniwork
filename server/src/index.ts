@@ -19,8 +19,7 @@ import { Comment } from "./entities/comment";
 import { CommentResolver } from "./resolvers/comment-resolver";
 import { Like } from "./entities/like";
 import { createLikeLoader } from "./utils/create-like-loader";
-import postUpload from "./upload/post-upload";
-import profileUpload from "./upload/profile-upload";
+import upload from "./upload";
 import { Follow } from "./entities/follow";
 import { createFollowLoader } from "./utils/create-follow-loader";
 
@@ -105,8 +104,7 @@ const main = async () => {
     });
 
     app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-    app.use("/upload/", postUpload);
-    app.use("/upload/", profileUpload);
+    app.use("/upload/", upload);
 
     apolloServer.applyMiddleware({
         app,

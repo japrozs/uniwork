@@ -85,10 +85,12 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({}) => {
                         View Profile
                     </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
-                    <TbSettings className="text-lg " />
-                    Settings
-                </DropdownMenuItem>
+                <Link href={`/app/settings`}>
+                    <DropdownMenuItem className="cursor-pointer flex w-full items-center text-sm gap-3 font-medium rounded-sm py-1.5 px-3 focus:text-black focus:bg-gray-100 text-gray-600">
+                        <TbSettings className="text-lg " />
+                        Settings
+                    </DropdownMenuItem>
+                </Link>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={logUserOut}

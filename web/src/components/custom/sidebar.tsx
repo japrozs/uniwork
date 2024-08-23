@@ -7,11 +7,12 @@ import { FiCompass } from "react-icons/fi";
 import { GoHomeFill } from "react-icons/go";
 import { IoNotifications, IoPeople } from "react-icons/io5";
 import { UserProfileDropdown } from "./user-profile-dropdown";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {}
 
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
-    const { data } = useMeQuery();
+    const pathname = usePathname();
     return (
         <div className="pr-2 pt-3.5">
             <Link href="/app/">
@@ -24,7 +25,11 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
                 />
             </Link>
             <a href="/app">
-                <div className="flex items-center text-slate-800 cursor-pointer mb-1.5 p-1.5 bg-gray-100 rounded-sm">
+                <div
+                    className={`flex items-center text-slate-800 cursor-pointer mb-1.5 p-1.5 ${
+                        pathname == "/app" ? "bg-gray-100" : "hover:bg-gray-100"
+                    } rounded-sm`}
+                >
                     <GoHomeFill className="mr-4 text-xl " />{" "}
                     <p className="font-medium text-sm">Home</p>
                 </div>
