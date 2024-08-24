@@ -35,12 +35,10 @@ query getUser($username: String!) {
         followerCount
         followThisUser
         followers {
-            followerId
-            followingId
+            ...RegularFollow
         }
         following {
-            followerId
-            followingId
+            ...RegularFollow
         }
         uni
         createdAt

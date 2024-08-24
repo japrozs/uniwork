@@ -1,0 +1,10 @@
+fragment RegularFollow on Follow {
+    followerId
+    follower {
+        ...RegularUser
+    }
+    followingId
+    following {
+        ...RegularUser
+    }
+}

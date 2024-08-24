@@ -135,6 +135,7 @@ export type Query = {
   getUser: User;
   getUserComments: Array<Comment>;
   me?: Maybe<User>;
+  suggestUsersToFollow: Array<User>;
 };
 
 
@@ -150,6 +151,11 @@ export type QueryGetPostArgs = {
 
 export type QueryGetUserArgs = {
   username: Scalars['String']['input'];
+};
+
+
+export type QueryGetUserCommentsArgs = {
+  id: Scalars['Int']['input'];
 };
 
 export type User = {
@@ -191,6 +197,8 @@ export type PostSnippetFragment = { __typename: 'Post', id: string, body: string
 export type RegularCommentFragment = { __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
+
+export type RegularFollowFragment = { __typename?: 'Follow', followerId: number, followingId: number, follower: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, following: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } };
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } | null };
 
@@ -273,7 +281,9 @@ export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetPostsQuery = { __typename?: 'Query', getPosts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } }> }> };
 
-export type GetUserCommentsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserCommentsQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
 
 
 export type GetUserCommentsQuery = { __typename?: 'Query', getUserComments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } }> };
@@ -283,12 +293,17 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string, posts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string }> }>, followers: Array<{ __typename?: 'Follow', followerId: number, followingId: number }>, following: Array<{ __typename?: 'Follow', followerId: number, followingId: number }> } };
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string, posts: Array<{ __typename: 'Post', id: string, body: string, likes: number, likeStatus?: number | null, attachments: Array<string>, creatorId: number, createdAt: string, updatedAt: string, creator: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, comments: Array<{ __typename: 'Comment', id: number, creatorId: number, body: string, postId: string, createdAt: string, updatedAt: string }> }>, followers: Array<{ __typename?: 'Follow', followerId: number, followingId: number, follower: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, following: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } }>, following: Array<{ __typename?: 'Follow', followerId: number, followingId: number, follower: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }, following: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } }> } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string } | null };
+
+export type SuggestUsersToFollowQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SuggestUsersToFollowQuery = { __typename?: 'Query', suggestUsersToFollow: Array<{ __typename: 'User', id: number, name: string, username: string, email: string, bio: string, avatar: string, bg: string, followingCount: number, followerCount: number, followThisUser?: number | null, uni: string, createdAt: string, updatedAt: string }> };
 
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
@@ -342,6 +357,18 @@ export const PostSnippetFragmentDoc = gql`
 }
     ${RegularUserFragmentDoc}
 ${RegularCommentFragmentDoc}`;
+export const RegularFollowFragmentDoc = gql`
+    fragment RegularFollow on Follow {
+  followerId
+  follower {
+    ...RegularUser
+  }
+  followingId
+  following {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
@@ -742,8 +769,8 @@ export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery
 export type GetPostsSuspenseQueryHookResult = ReturnType<typeof useGetPostsSuspenseQuery>;
 export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
 export const GetUserCommentsDocument = gql`
-    query getUserComments {
-  getUserComments {
+    query getUserComments($id: Int!) {
+  getUserComments(id: $id) {
     ...RegularComment
   }
 }
@@ -761,10 +788,11 @@ export const GetUserCommentsDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserCommentsQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetUserCommentsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserCommentsQuery, GetUserCommentsQueryVariables>) {
+export function useGetUserCommentsQuery(baseOptions: Apollo.QueryHookOptions<GetUserCommentsQuery, GetUserCommentsQueryVariables> & ({ variables: GetUserCommentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetUserCommentsQuery, GetUserCommentsQueryVariables>(GetUserCommentsDocument, options);
       }
@@ -817,12 +845,10 @@ export const GetUserDocument = gql`
     followerCount
     followThisUser
     followers {
-      followerId
-      followingId
+      ...RegularFollow
     }
     following {
-      followerId
-      followingId
+      ...RegularFollow
     }
     uni
     createdAt
@@ -830,7 +856,8 @@ export const GetUserDocument = gql`
     __typename
   }
 }
-    ${RegularUserFragmentDoc}`;
+    ${RegularUserFragmentDoc}
+${RegularFollowFragmentDoc}`;
 
 /**
  * __useGetUserQuery__
@@ -903,3 +930,42 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SuggestUsersToFollowDocument = gql`
+    query SuggestUsersToFollow {
+  suggestUsersToFollow {
+    ...RegularUser
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+/**
+ * __useSuggestUsersToFollowQuery__
+ *
+ * To run a query within a React component, call `useSuggestUsersToFollowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSuggestUsersToFollowQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSuggestUsersToFollowQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSuggestUsersToFollowQuery(baseOptions?: Apollo.QueryHookOptions<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>(SuggestUsersToFollowDocument, options);
+      }
+export function useSuggestUsersToFollowLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>(SuggestUsersToFollowDocument, options);
+        }
+export function useSuggestUsersToFollowSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>(SuggestUsersToFollowDocument, options);
+        }
+export type SuggestUsersToFollowQueryHookResult = ReturnType<typeof useSuggestUsersToFollowQuery>;
+export type SuggestUsersToFollowLazyQueryHookResult = ReturnType<typeof useSuggestUsersToFollowLazyQuery>;
+export type SuggestUsersToFollowSuspenseQueryHookResult = ReturnType<typeof useSuggestUsersToFollowSuspenseQuery>;
+export type SuggestUsersToFollowQueryResult = Apollo.QueryResult<SuggestUsersToFollowQuery, SuggestUsersToFollowQueryVariables>;

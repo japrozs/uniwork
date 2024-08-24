@@ -192,9 +192,13 @@ let UserResolver = class UserResolver {
             .where("user.username = :username", { username })
             .leftJoinAndSelect("user.posts", "posts")
             .leftJoinAndSelect("user.following", "following")
+            .leftJoinAndSelect("following.following", "followingUser")
+            .leftJoinAndSelect("following.follower", "followersUser")
             .leftJoinAndSelect("user.followers", "followers")
+            .leftJoinAndSelect("followers.follower", "followerUser")
+            .leftJoinAndSelect("followers.following", "followingsUser")
             .leftJoinAndSelect("posts.creator", "postsCreator")
-            .leftJoinAndSelect("posts.comments", "postsCoimments")
+            .leftJoinAndSelect("posts.comments", "postsComments")
             .orderBy({
             "posts.createdAt": "DESC",
         })
@@ -279,13 +283,31 @@ let UserResolver = class UserResolver {
             return true;
         });
     }
-    async getUserComments({ req }) {
+    async getUserComments(id, { req }) {
         return comment_1.Comment.find({
             where: {
-                creatorId: req.session.userId,
+                creatorId: id,
             },
             relations: ["creator", "post"],
         });
+    }
+    async suggestUsersToFollow({ req }) {
+        const currentUserId = req.session.userId;
+        if (!currentUserId) {
+            throw new Error("Not authenticated");
+        }
+        const subQuery = (0, typeorm_1.getRepository)(follow_1.Follow)
+            .createQueryBuilder("follow")
+            .select("follow.followingId")
+            .where("follow.followerId = :currentUserId", { currentUserId });
+        const suggestedUsers = await (0, typeorm_1.getRepository)(user_1.User)
+            .createQueryBuilder("user")
+            .where("user.id != :currentUserId", { currentUserId })
+            .andWhere(`user.id NOT IN (${subQuery.getQuery()})`)
+            .orderBy("user.followerCount", "DESC")
+            .take(5)
+            .getMany();
+        return suggestedUsers;
     }
 };
 __decorate([
@@ -375,11 +397,20 @@ __decorate([
 ], UserResolver.prototype, "follow", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [comment_1.Comment]),
+    __param(0, (0, type_graphql_1.Arg)("id", () => type_graphql_1.Int)),
+    __param(1, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "getUserComments", null);
+__decorate([
+    (0, type_graphql_1.UseMiddleware)(is_auth_1.isAuth),
+    (0, type_graphql_1.Query)(() => [user_1.User]),
     __param(0, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], UserResolver.prototype, "getUserComments", null);
+], UserResolver.prototype, "suggestUsersToFollow", null);
 UserResolver = __decorate([
     (0, type_graphql_1.Resolver)(user_1.User)
 ], UserResolver);

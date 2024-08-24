@@ -243,9 +243,13 @@ export class UserResolver {
             .where("user.username = :username", { username })
             .leftJoinAndSelect("user.posts", "posts")
             .leftJoinAndSelect("user.following", "following")
+            .leftJoinAndSelect("following.following", "followingUser") // Include following user details
+            .leftJoinAndSelect("following.follower", "followersUser")
             .leftJoinAndSelect("user.followers", "followers")
+            .leftJoinAndSelect("followers.follower", "followerUser") // Include follower user details
+            .leftJoinAndSelect("followers.following", "followingsUser") // Include follower user details
             .leftJoinAndSelect("posts.creator", "postsCreator")
-            .leftJoinAndSelect("posts.comments", "postsCoimments")
+            .leftJoinAndSelect("posts.comments", "postsComments")
             .orderBy({
                 "posts.createdAt": "DESC",
             })
@@ -377,7 +381,10 @@ export class UserResolver {
     }
 
     @Query(() => [Comment])
-    async getUserComments(@Ctx() { req }: Context) {
+    async getUserComments(
+        @Arg("id", () => Int) id: number,
+        @Ctx() { req }: Context
+    ) {
         // return Comment.find({
         //     creatorId: req.session.userId
         // }, {
@@ -385,10 +392,35 @@ export class UserResolver {
         // });
         return Comment.find({
             where: {
-                creatorId: req.session.userId,
+                creatorId: id,
             },
             relations: ["creator", "post"],
         });
+    }
+
+    @UseMiddleware(isAuth)
+    @Query(() => [User])
+    async suggestUsersToFollow(@Ctx() { req }: Context): Promise<User[]> {
+        const currentUserId = req.session.userId;
+
+        if (!currentUserId) {
+            throw new Error("Not authenticated");
+        }
+
+        const subQuery = getRepository(Follow)
+            .createQueryBuilder("follow")
+            .select("follow.followingId")
+            .where("follow.followerId = :currentUserId", { currentUserId });
+
+        const suggestedUsers = await getRepository(User)
+            .createQueryBuilder("user")
+            .where("user.id != :currentUserId", { currentUserId })
+            .andWhere(`user.id NOT IN (${subQuery.getQuery()})`)
+            .orderBy("user.followerCount", "DESC")
+            .take(5)
+            .getMany();
+
+        return suggestedUsers;
     }
 
     // @UseMiddleware(isAuth)

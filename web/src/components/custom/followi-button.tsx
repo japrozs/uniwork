@@ -6,9 +6,15 @@ import { useApolloClient } from "@apollo/client";
 
 interface FollowiButtonProps {
     user: RegularUserFragment;
+    noCacheReset?: boolean;
+    afterFn?: () => void;
 }
 
-export const FollowiButton: React.FC<FollowiButtonProps> = ({ user }) => {
+export const FollowiButton: React.FC<FollowiButtonProps> = ({
+    user,
+    noCacheReset,
+    afterFn,
+}) => {
     const [followMutation, { loading }] = useFollowMutation();
     const client = useApolloClient();
 
@@ -18,7 +24,12 @@ export const FollowiButton: React.FC<FollowiButtonProps> = ({ user }) => {
                 id: user.id,
             },
         });
-        await client.resetStore();
+        if (!noCacheReset) {
+            await client.resetStore();
+        }
+        if (afterFn) {
+            afterFn();
+        }
     };
 
     return (
@@ -27,7 +38,7 @@ export const FollowiButton: React.FC<FollowiButtonProps> = ({ user }) => {
             disabled={loading}
             className={`${
                 loading && "cursor-not-allowed opacity-50"
-            } transition-all flex items-center ml-auto mr-0 bg-white py-1.5 px-6 font-medium rounded-md text-black border border-gray-200 hover:bg-gray-50 text-sm`}
+            } transition-all flex items-center bg-primary-color py-1.5 px-6 font-medium rounded-md text-white hover:bg-primary-color/95 text-sm`}
         >
             <>
                 {user.followThisUser && (

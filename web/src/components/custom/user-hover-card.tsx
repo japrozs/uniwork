@@ -20,7 +20,7 @@ interface UserHoverCardProps {
 export const UserHoverCard: React.FC<UserHoverCardProps> = ({ creator }) => {
     const { data: meData, loading } = useMeQuery();
     return (
-        <div className="p-3" onClick={(e) => e.stopPropagation()}>
+        <div className="p-3 bg-white" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center">
                 <div>
                     <img
@@ -34,7 +34,11 @@ export const UserHoverCard: React.FC<UserHoverCardProps> = ({ creator }) => {
                         alt="avatar"
                     />
                 </div>
-                <FollowiButton user={creator} />
+                {creator.id !== meData?.me?.id && (
+                    <div className="ml-auto mr-0">
+                        <FollowiButton user={creator} />
+                    </div>
+                )}
             </div>
             <div className="mt-3" />
             <a href={`/app/u/${creator.username}`}>

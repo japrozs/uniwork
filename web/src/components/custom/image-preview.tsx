@@ -49,7 +49,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
                                 post.attachments.length === 1
                                     ? "w-auto h-auto max-h-96"
                                     : "w-full h-44"
-                            } cursor-pointer hover:opacity-[.98] hover:bg-gray-900/5 object-cover rounded-md border border-gray-100`}
+                            } z-0 cursor-pointer hover:opacity-[.98] hover:bg-gray-900/5 object-cover rounded-md border border-gray-100`}
                         />
                     ))}
                 </div>

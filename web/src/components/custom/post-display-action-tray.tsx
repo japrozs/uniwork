@@ -99,7 +99,7 @@ export const PostDisplayActionTray: React.FC<PostDisplayActionTrayProps> = ({
                         onClick={(e) => {
                             e.stopPropagation();
                         }}
-                        className="hover:bg-gray-100 p-1 rounded-full cursor-pointer"
+                        className="hover:bg-gray-100 p-1 rounded-full cursor-pointer focus:outline-none"
                     >
                         <IoIosMore />
                     </DropdownMenuTrigger>

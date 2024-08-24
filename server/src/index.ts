@@ -8,7 +8,7 @@ import Redis from "ioredis";
 import path from "path";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { createConnection } from "typeorm";
+import { createConnection, getRepository } from "typeorm";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import { User } from "./entities/user";
 import { UserResolver } from "./resolvers/user-resolver";
@@ -22,6 +22,7 @@ import { createLikeLoader } from "./utils/create-like-loader";
 import upload from "./upload";
 import { Follow } from "./entities/follow";
 import { createFollowLoader } from "./utils/create-follow-loader";
+import argon2 from "argon2";
 
 const main = async () => {
     const conn = await createConnection({
@@ -33,6 +34,13 @@ const main = async () => {
         entities: [User, Post, Comment, Like, Follow],
     });
     await conn.runMigrations();
+
+    // await getRepository(User)
+    //     .createQueryBuilder()
+    //     .delete()
+    //     .from(User)
+    //     .where("id NOT IN (:...ids)", { ids: [1, 2] })
+    //     .execute();
 
     // const posts = await Post.find({});
 
@@ -54,6 +62,17 @@ const main = async () => {
     //     await Post.create({
     //         creatorId: 1,
     //         body: faker.lorem.sentences(),
+    //     }).save();
+    // }
+
+    // for (let _ = 0; _ < 100; _++) {
+    //     const email = faker.internet.email();
+    //     const password = await argon2.hash(email);
+    //     await User.create({
+    //         name: faker.person.fullName(),
+    //         email,
+    //         password,
+    //         username: faker.internet.userName(),
     //     }).save();
     // }
 

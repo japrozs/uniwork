@@ -32,6 +32,10 @@ import { EditProfileModal } from "@/components/custom/edit-profile-modal";
 import { AMERICA_COLLEGES_LIST } from "@/data";
 import { CommentCard } from "@/components/custom/comment-card";
 import Link from "next/link";
+import { MdOutlineCameraAlt } from "react-icons/md";
+import { BiCommentDetail } from "react-icons/bi";
+import { SuggestUsersToFollow } from "@/components/custom/suggest-users-to-follow";
+import { ConnectionsView } from "@/components/custom/connections-view";
 
 interface UserPageProps {}
 
@@ -49,7 +53,11 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
     console.log(data?.getUser.following);
 
     const { data: commentsData, loading: commentsLoading } =
-        useGetUserCommentsQuery();
+        useGetUserCommentsQuery({
+            variables: {
+                id: data?.getUser.id || -1,
+            },
+        });
     return (
         <Wrapper>
             <div className="flex overflow-y-auto w-[80%]">
@@ -169,7 +177,7 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                 <div className="px-3">
                                     <p className="mt-2.5 text-md font-semibold">
                                         {data.getUser.name}
-                                        <span className="ml-1.5 text-xs font-medium border border-blue-100 text-blue-500 py-0.1 px-2 rounded-md bg-blue-50">
+                                        <span className="ml-1.5 text-xs font-semibold border border-blue-100 text-blue-500 py-0.5 px-2 rounded-md bg-blue-50">
                                             #{data.getUser.id}
                                         </span>
                                     </p>
@@ -257,6 +265,17 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                                         />
                                                     )
                                                 )}
+                                                {data.getUser.posts.length ===
+                                                    0 && (
+                                                    <div className="w-full text-center mx-auto mt-[10vh]">
+                                                        <div>
+                                                            <MdOutlineCameraAlt className="mx-auto mb-2 text-gray-400 text-2xl" />
+                                                            <p className="text-sm font-semibold uppercase text-gray-400">
+                                                                NO POSTS YET
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </TabPanel>
                                             <TabPanel>
                                                 {commentsData && !loading ? (
@@ -277,6 +296,20 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                                                                     />
                                                                 </Link>
                                                             )
+                                                        )}
+                                                        {commentsData
+                                                            .getUserComments
+                                                            .length === 0 && (
+                                                            <div className="w-full text-center mx-auto mt-[10vh]">
+                                                                <div>
+                                                                    <BiCommentDetail className="mx-auto mb-2 text-gray-400 text-2xl" />
+                                                                    <p className="text-sm font-semibold uppercase text-gray-400">
+                                                                        NO
+                                                                        REPLIES
+                                                                        YET
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 ) : (
@@ -306,6 +339,43 @@ const UserPage: React.FC<UserPageProps> = ({}) => {
                 <div className="w-[35%] overflow-y-auto pl-2 pt-3 sticky top-0">
                     <div className="w-full">
                         <Search />
+                        {meData?.me && data && !loading ? (
+                            <>
+                                {data.getUser.id === meData.me.id && (
+                                    <>
+                                        <ConnectionsView
+                                            followers={data.getUser.followers}
+                                            following={data.getUser.following}
+                                        />
+                                        {meData.me.uni.trim().length === 0 && (
+                                            <div className="py-2 px-2.5 border border-gray-100 rounded-md mb-5">
+                                                <p className="text-base font-semibold pb-1">
+                                                    Add your university
+                                                </p>
+                                                <p className="text-xs font-medium text-gray-600 pb-2">
+                                                    Update your profile and
+                                                    university info to unlock
+                                                    exclusive groups and
+                                                    features on UniWork.
+                                                </p>
+                                                <SimpleButton
+                                                    onClick={() => {
+                                                        setOpen(true);
+                                                    }}
+                                                    label="Add university"
+                                                />
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                                <SuggestUsersToFollow noAfterFn />
+                            </>
+                        ) : (
+                            <div className="w-full mx-auto mt-20">
+                                {/* try skeleton loaders instead of spinners */}
+                                <SpinnerWrapper />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

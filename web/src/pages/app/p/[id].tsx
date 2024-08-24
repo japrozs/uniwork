@@ -227,11 +227,12 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                         <div className="flex items-start">
                                             <a
                                                 href={`/app/u/${data.getPost.creator.username}`}
+                                                className="block w-full overflow-hidden"
                                             >
-                                                <p className="text-sm font-medium text-black hover:underline">
-                                                    {data.getPost.creator.name}
+                                                <p className="text-sm font-medium text-black hover:underline truncate">
+                                                    {data.getPost.creator.name}{" "}
                                                 </p>
-                                                <p className="text-gray-500 menlo text-xs font-medium">
+                                                <p className="text-gray-500 menlo text-xs font-medium truncate">
                                                     @
                                                     {
                                                         data.getPost.creator
@@ -241,9 +242,13 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                                             </a>
                                             {data.getPost.creator.id !==
                                                 meData?.me?.id && (
-                                                <FollowiButton
-                                                    user={data.getPost.creator}
-                                                />
+                                                <div className="ml-auto  w-full mr-0">
+                                                    <FollowiButton
+                                                        user={
+                                                            data.getPost.creator
+                                                        }
+                                                    />
+                                                </div>
                                             )}
                                         </div>
                                         <p className="text-xs mt-2.5 font-medium text-gray-800">

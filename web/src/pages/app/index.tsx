@@ -37,6 +37,8 @@ import { toast } from "sonner";
 import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import Axios from "axios";
+import { SuggestUsersToFollow } from "@/components/custom/suggest-users-to-follow";
+import { ConnectionsView } from "@/components/custom/connections-view";
 
 interface HomeProps {}
 
@@ -237,7 +239,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                 <div className="w-[35%] overflow-y-auto pl-2 pt-0.5 sticky top-0">
                     <div className="w-full">
                         <Search />
-                        <p className="text-sm font-semibold">Sidebar Section</p>
+                        <SuggestUsersToFollow />
                     </div>
                 </div>
             </div>

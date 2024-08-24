@@ -1,0 +1,5 @@
+query SuggestUsersToFollow {
+    suggestUsersToFollow {
+        ...RegularUser
+    }
+}

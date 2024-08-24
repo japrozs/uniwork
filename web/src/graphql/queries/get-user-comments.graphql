@@ -1,5 +1,5 @@
-query getUserComments {
-    getUserComments {
+query getUserComments($id: Int!) {
+    getUserComments(id: $id) {
         ...RegularComment
     }
 }
