@@ -102,146 +102,136 @@ const Home: React.FC<HomeProps> = ({}) => {
 
     return (
         <Wrapper>
-            <div className="flex overflow-y-auto w-[80%] pt-3.5">
-                <div className="flex w-[65%] items-start">
-                    {!data && loading ? (
-                        <div className="w-full mx-auto mt-[10vh]">
-                            {/* try skeleton loaders instead of spinners */}
-                            <SpinnerWrapper />
-                        </div>
-                    ) : (
-                        <div className="w-full">
-                            <div>
-                                <div className="flex items-start space-x-3 p-3 border border-gray-100 rounded-md mb-3">
-                                    <div>
-                                        <img
-                                            src={
-                                                `${process.env.NEXT_PUBLIC_API_URL}/${meData?.me?.avatar}` ||
-                                                "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
-                                            }
-                                            className="min-w-8 ml-auto object-cover mr-0 w-8 h-8 flex items-center justify-center rounded-full"
-                                            height={20}
-                                            width={20}
-                                            alt="avatar"
-                                        />
-                                    </div>
-                                    <div className="w-full">
-                                        {/* TODO:  make this an autoexpandable text area */}
-                                        {/* <input
+            <div>
+                {!data && loading ? (
+                    <div className="w-full mx-auto mt-[10vh]">
+                        {/* try skeleton loaders instead of spinners */}
+                        <SpinnerWrapper />
+                    </div>
+                ) : (
+                    <div className="pt-3.5">
+                        <div>
+                            <div className="flex items-start space-x-3 p-3 border border-gray-100 rounded-md mb-3">
+                                <div>
+                                    <img
+                                        src={
+                                            `${process.env.NEXT_PUBLIC_API_URL}/${meData?.me?.avatar}` ||
+                                            "https://i.ibb.co/ZLw7SsS/icons8-test-account-96.png"
+                                        }
+                                        className="min-w-8 ml-auto object-cover mr-0 w-8 h-8 flex items-center justify-center rounded-full"
+                                        height={20}
+                                        width={20}
+                                        alt="avatar"
+                                    />
+                                </div>
+                                <div className="w-full">
+                                    {/* TODO:  make this an autoexpandable text area */}
+                                    {/* <input
                                             
                                         /> */}
-                                        <TextareaAutosize
-                                            placeholder="What is happening?!?"
-                                            className="text-sm font-medium text-black py-1.5 pl-1 rounded-md w-full focus:outline-none textarea break-words cursor-text resize-none"
-                                            onChange={(e) =>
-                                                setPostBody(e.target.value)
-                                            }
-                                            onFocus={() =>
-                                                setPostInputActive(true)
-                                            }
-                                            onBlur={() =>
-                                                setPostInputActive(false)
-                                            }
-                                            value={postBody}
-                                        />
-                                        {selectedImages.length > 0 && (
-                                            <div className="flex flex-wrap mt-2">
-                                                {selectedImages.map(
-                                                    (image, index) => (
-                                                        <div
-                                                            key={index}
-                                                            className="relative m-1"
+                                    <TextareaAutosize
+                                        placeholder="What is happening?!?"
+                                        className="text-sm font-medium text-black py-1.5 pl-1 rounded-md w-full focus:outline-none textarea break-words cursor-text resize-none"
+                                        onChange={(e) =>
+                                            setPostBody(e.target.value)
+                                        }
+                                        onFocus={() => setPostInputActive(true)}
+                                        onBlur={() => setPostInputActive(false)}
+                                        value={postBody}
+                                    />
+                                    {selectedImages.length > 0 && (
+                                        <div className="flex flex-wrap mt-2">
+                                            {selectedImages.map(
+                                                (image, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="relative m-1"
+                                                    >
+                                                        <img
+                                                            src={URL.createObjectURL(
+                                                                image
+                                                            )}
+                                                            alt={`preview ${index}`}
+                                                            className="w-auto h-44 object-cover rounded"
+                                                        />
+                                                        <button
+                                                            onClick={() =>
+                                                                setSelectedImages(
+                                                                    (images) =>
+                                                                        images.filter(
+                                                                            (
+                                                                                _,
+                                                                                i
+                                                                            ) =>
+                                                                                i !==
+                                                                                index
+                                                                        )
+                                                                )
+                                                            }
+                                                            className="absolute top-3 right-3 bg-gray-800 text-white rounded-full p-0.5"
                                                         >
-                                                            <img
-                                                                src={URL.createObjectURL(
-                                                                    image
-                                                                )}
-                                                                alt={`preview ${index}`}
-                                                                className="w-auto h-44 object-cover rounded"
-                                                            />
-                                                            <button
-                                                                onClick={() =>
-                                                                    setSelectedImages(
-                                                                        (
-                                                                            images
-                                                                        ) =>
-                                                                            images.filter(
-                                                                                (
-                                                                                    _,
-                                                                                    i
-                                                                                ) =>
-                                                                                    i !==
-                                                                                    index
-                                                                            )
-                                                                    )
-                                                                }
-                                                                className="absolute top-3 right-3 bg-gray-800 text-white rounded-full p-0.5"
-                                                            >
-                                                                <RxCross2 className="text-lg" />
-                                                            </button>
-                                                        </div>
-                                                    )
-                                                )}
-                                            </div>
-                                        )}
-                                        <hr
-                                            className={`mt-0 mb-2 ${
-                                                !postInputActive && "opacity-0"
-                                            }`}
-                                        />
-                                        <div className="flex items-start">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                multiple
-                                                max="4"
-                                                onChange={handleImageSelect}
-                                                style={{ display: "none" }}
-                                                id="image-input"
-                                            />
-                                            <label
-                                                htmlFor="image-input"
-                                                className="p-1 hover:bg-blue-50  mr-1.5 rounded-full text-primary-color cursor-pointer"
-                                            >
-                                                <LuImage className="text-xl" />
-                                            </label>
-                                            <EmojiSelector
-                                                text={postBody}
-                                                setText={setPostBody}
-                                            />
-                                            <button
-                                                onClick={createPost}
-                                                className={`ml-auto mr-0 bg-primary-color ${
-                                                    (postBody.length === 0 ||
-                                                        submitLoading) &&
-                                                    "bg-opacity-60 cursor-not-allowed"
-                                                } py-1.5 px-6 font-medium rounded-md text-white text-sm`}
-                                                disabled={
-                                                    postBody.length === 0 ||
-                                                    submitLoading
-                                                }
-                                            >
-                                                Post
-                                            </button>
+                                                            <RxCross2 className="text-lg" />
+                                                        </button>
+                                                    </div>
+                                                )
+                                            )}
                                         </div>
+                                    )}
+                                    <hr
+                                        className={`mt-0 mb-2 ${
+                                            !postInputActive && "opacity-0"
+                                        }`}
+                                    />
+                                    <div className="flex items-start">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            max="4"
+                                            onChange={handleImageSelect}
+                                            style={{ display: "none" }}
+                                            id="image-input"
+                                        />
+                                        <label
+                                            htmlFor="image-input"
+                                            className="p-1 hover:bg-blue-50  mr-1.5 rounded-full text-primary-color cursor-pointer"
+                                        >
+                                            <LuImage className="text-xl" />
+                                        </label>
+                                        <EmojiSelector
+                                            text={postBody}
+                                            setText={setPostBody}
+                                        />
+                                        <button
+                                            onClick={createPost}
+                                            className={`ml-auto mr-0 bg-primary-color ${
+                                                (postBody.length === 0 ||
+                                                    submitLoading) &&
+                                                "bg-opacity-60 cursor-not-allowed"
+                                            } py-1.5 px-6 font-medium rounded-md text-white text-sm`}
+                                            disabled={
+                                                postBody.length === 0 ||
+                                                submitLoading
+                                            }
+                                        >
+                                            Post
+                                        </button>
                                     </div>
                                 </div>
-                                {/* <hr className="mt-2 mb-5" /> */}
                             </div>
-                            {data?.getPosts.map(
-                                (p: PostSnippetFragment, idx: number) => (
-                                    <PostCard key={idx} post={p} />
-                                )
-                            )}
+                            {/* <hr className="mt-2 mb-5" /> */}
                         </div>
-                    )}
-                </div>
-                <div className="w-[35%] overflow-y-auto pl-2 pt-0.5 sticky top-0">
-                    <div className="w-full">
-                        <Search />
-                        <SuggestUsersToFollow />
+                        {data?.getPosts.map(
+                            (p: PostSnippetFragment, idx: number) => (
+                                <PostCard key={idx} post={p} />
+                            )
+                        )}
                     </div>
-                </div>
+                )}
+            </div>
+            <div className="">
+                <Search />
+                <SuggestUsersToFollow />
             </div>
         </Wrapper>
     );
