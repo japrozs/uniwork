@@ -3,20 +3,22 @@ import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { toast } from "sonner";
 import { useApolloClient } from "@apollo/client";
+import { useRouter } from "next/router";
 
 interface FollowiButtonProps {
     user: RegularUserFragment;
     noCacheReset?: boolean;
-    afterFn?: () => void;
+    pushToProfile?: boolean;
 }
 
 export const FollowiButton: React.FC<FollowiButtonProps> = ({
     user,
     noCacheReset,
-    afterFn,
+    pushToProfile,
 }) => {
     const [followMutation, { loading }] = useFollowMutation();
     const client = useApolloClient();
+    const router = useRouter();
 
     const follow = async () => {
         await followMutation({
@@ -27,8 +29,8 @@ export const FollowiButton: React.FC<FollowiButtonProps> = ({
         if (!noCacheReset) {
             await client.resetStore();
         }
-        if (afterFn) {
-            afterFn();
+        if (pushToProfile) {
+            router.push(`/app/u/${user.username}`);
         }
     };
 

@@ -79,11 +79,7 @@ export const SuggestUsersToFollow: React.FC<SuggestUsersToFollowProps> = ({
                                         <FollowiButton
                                             user={u}
                                             {...(!noAfterFn && {
-                                                afterFn: () => {
-                                                    router.push(
-                                                        `/app/u/${u.username}`
-                                                    );
-                                                },
+                                                pushToProfile: true,
                                             })}
                                         />
                                     </div>
