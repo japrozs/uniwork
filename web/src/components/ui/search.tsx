@@ -50,7 +50,7 @@ export const Search: React.FC<SearchProps> = ({}) => {
                 </div>
                 <div
                     className={`
-                                        absolute mt-0.5 left-0 right-0 bg-white border border-gray-100 rounded-md shadow-sm z-10 overflow-y-auto
+                                        absolute mt-0.5 left-0 right-0 bg-white border border-gray-200 rounded-md shadow-md z-10 overflow-y-auto
                                         transition-opacity ease-in-out
                                         ${
                                             isActive
@@ -60,19 +60,11 @@ export const Search: React.FC<SearchProps> = ({}) => {
                                     `}
                 >
                     <div className="px-3 py-2.5">
-                        <p className="text-sm font-semibold">Search results</p>
-                        <p className="text-sm font-semibold">Blah</p>
-                        <p className="text-sm font-semibold">Blah Bla</p>
-                        <p className="text-sm font-semibold">Blah Bla Bla</p>
-                        <p className="text-sm font-semibold">
-                            Blah Bla Bla Bla
-                        </p>
-                        <p className="text-sm font-semibold">
-                            Blah Bla Bla Bla Bla
-                        </p>
-                        <p className="text-sm font-semibold">
-                            Blah Bla Bla Bla Bla Bla
-                        </p>
+                        {query.trim().length === 0 && (
+                            <p className="text-sm font-semibold text-center text-black my-3">
+                                Try searching for people
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

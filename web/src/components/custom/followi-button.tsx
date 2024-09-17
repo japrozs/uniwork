@@ -9,12 +9,14 @@ interface FollowiButtonProps {
     user: RegularUserFragment;
     noCacheReset?: boolean;
     pushToProfile?: boolean;
+    nonColor?: boolean;
 }
 
 export const FollowiButton: React.FC<FollowiButtonProps> = ({
     user,
     noCacheReset,
     pushToProfile,
+    nonColor,
 }) => {
     const [followMutation, { loading }] = useFollowMutation();
     const client = useApolloClient();
@@ -40,7 +42,11 @@ export const FollowiButton: React.FC<FollowiButtonProps> = ({
             disabled={loading}
             className={`${
                 loading && "cursor-not-allowed opacity-50"
-            } transition-all flex items-center bg-primary-color py-1.5 px-6 font-medium rounded-md text-white hover:bg-primary-color/95 text-sm`}
+            } transition-all flex items-center ${
+                nonColor
+                    ? "text-black border border-gray-200 hover:bg-gray-50"
+                    : "bg-primary-color text-white hover:bg-primary-color/95"
+            } py-1.5 px-6 font-medium rounded-md  text-sm`}
         >
             <>
                 {user.followThisUser && (
